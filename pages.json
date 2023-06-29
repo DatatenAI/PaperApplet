@@ -1,0 +1,212 @@
+{
+	"pages": [{
+		"path": "pages/index",
+		"style": {
+			/*#ifdef  H5*/
+			"navigationStyle": "custom",
+			/*#endif*/
+			"navigationBarTitleText": "首页"
+		}
+	}, {
+		"path": "pages/mine",
+		"style": {
+			"navigationBarTitleText": "我的",
+			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/login",
+		"style": {
+			"navigationBarTitleText": "登录"
+		}
+	}],
+	"subPackages": [{
+		//首页分包
+		"root": "pages/home",
+		"pages": [{
+			"path": "detail/detail",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},{
+			"path": "subscribe/index",
+			"style": {
+				"navigationBarTitleText": "订阅"
+			}
+		}]
+	}, {
+		//我的
+		"root": "pages/mine",
+		"pages": [{
+			"path": "avatar/index",
+			"style": {
+				"navigationBarTitleText": "修改头像"
+			}
+		}, {
+			"path": "info/index",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		}, {
+			"path": "info/edit",
+			"style": {
+				"navigationBarTitleText": "编辑资料"
+			}
+		}, {
+			"path": "pwd/index",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		}, {
+			"path": "history/list",
+			"style": {
+				"navigationBarTitleText": "历史记录"
+			}
+		}, {
+			"path": "history/detail",
+			"style": {
+				"navigationBarTitleText": "历史记录详情"
+			}
+		}, {
+			"path": "collect/list",
+			"style": {
+				"navigationBarTitleText": "收藏记录"
+			}
+		}, {
+			"path": "collect/detail",
+			"style": {
+				"navigationBarTitleText": "收藏记录详情"
+			}
+		}, {
+			"path": "endorse/list",
+			"style": {
+				"navigationBarTitleText": "赞同记录"
+			}
+		}, {
+			"path": "endorse/detail",
+			"style": {
+				"navigationBarTitleText": "赞同记录详情"
+			}
+		}, {
+			"path": "album/create",
+			"style": {
+				"navigationBarTitleText": "创建专辑"
+			}
+		}, {
+			"path": "album/edit",
+			"style": {
+				"navigationBarTitleText": "编辑专辑"
+			}
+		}, {
+			"path": "album/list",
+			"style": {
+				"navigationBarTitleText": "专辑列表"
+			}
+		}, {
+			"path": "info/bindEmail",
+			"style": {
+				"navigationBarTitleText": "绑定邮箱"
+			}
+		}]
+	}, {
+		//公开的部分
+		"root": "pages/public",
+		"pages": [{
+			"path": "protocol",
+			"style": {
+				"navigationBarTitleText": "隐私协议"
+			}
+		}, {
+			"path": "privacy",
+			"style": {
+				"navigationBarTitleText": "用户协议"
+			}
+		}, {
+			"path": "about",
+			"style": {
+				"navigationBarTitleText": "关于我们"
+			}
+		}, {
+			"path": "help",
+			"style": {
+				"navigationBarTitleText": "常见问题"
+			}
+		}, {
+			"path": "setting",
+			"style": {
+				"navigationBarTitleText": "应用设置"
+			}
+		}, {
+			"path": "join",
+			"style": {
+				"navigationBarTitleText": "加入交流群"
+			}
+		}, {
+			"path": "weixin",
+			"style": {
+				"navigationBarTitleText": "公众号"
+			}
+		}, {
+			"path": "feedback",
+			"style": {
+				"navigationBarTitleText": "用户反馈"
+			}
+		}]
+	}, {
+		//公共部分
+		"root": "pages/common",
+		"pages": [{
+			"path": "notice/list",
+			"style": {
+				"navigationBarTitleText": "系统通知"
+			}
+		}, {
+			"path": "notice/detail",
+			"style": {
+				"navigationBarTitleText": "系统通知详情"
+			}
+		}, {
+			"path": "search/index",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
+		}, {
+			"path": "search/list",
+			"style": {
+				"navigationBarTitleText": "搜索列表"
+			}
+		}, {
+			"path": "webview/index",
+			"style": {
+				"navigationBarTitleText": "浏览网页"
+			}
+		}, {
+			"path": "textview/index",
+			"style": {
+				"navigationBarTitleText": "浏览文本"
+			}
+		}]
+	}],
+	"tabBar": {
+		"color": "#000000",
+		"selectedColor": "#3B00FF",
+		"borderStyle": "white",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/index",
+			"iconPath": "static/images/tabbar/home.png",
+			"selectedIconPath": "static/images/tabbar/home_.png",
+			"text": "首页"
+		}, {
+			"pagePath": "pages/mine",
+			"iconPath": "static/images/tabbar/mine.png",
+			"selectedIconPath": "static/images/tabbar/mine_.png",
+			"text": "我的"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "chatPaper",
+		"navigationBarBackgroundColor": "#f5f8fa",
+		"backgroundColor": "#F8F8F8"
+	}
+}
