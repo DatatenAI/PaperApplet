@@ -32,6 +32,11 @@
 			"style": {
 				"navigationBarTitleText": "订阅"
 			}
+		},{
+			"path": "poster/index",
+			"style": {
+				"navigationBarTitleText": "海报模板"
+			}
 		}]
 	}, {
 		//我的
@@ -205,7 +210,7 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "chatPaper",
+		"navigationBarTitleText": "量拾",
 		"navigationBarBackgroundColor": "#f5f8fa",
 		"backgroundColor": "#F8F8F8"
 	}

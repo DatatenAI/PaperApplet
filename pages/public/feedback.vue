@@ -69,7 +69,9 @@
 		},
 		onShow() {
 			var that = this;
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 		},
 		onReady() {
 			// this.$refs.form.setRules(this.rules)

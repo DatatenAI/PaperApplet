@@ -54,7 +54,7 @@
 
 <script>
 	import config from '@/config.js';
-	import mSearch from '@/components/rf-search/rf-search';
+	import mSearch from '@/pages/common/components/rf-search/rf-search';
 	export default {
 		data() {
 			return {

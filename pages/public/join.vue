@@ -9,6 +9,10 @@
 				<view class="remark">{{item.remark || ''}}</view>
 			</view>
 		</view>
+		
+		<view class="nodata" v-if="list.length == 0">
+			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+		</view>
 	</view>
 </template>
 
@@ -74,7 +78,9 @@
 				pageNum: 1,
 				pageSize: 10
 			};
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 			that.getJoinList();
 		},
 		// 下拉到底部后加载新数据

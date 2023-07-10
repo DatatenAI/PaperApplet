@@ -19,8 +19,11 @@
 		</view>
 
 		<view class="info_box" v-else>
-			<view class="avatar_box" @click="navTo(`/pages/mine/info/index`)">
-				<image :src="user.avatar" mode="widthFix" />
+			<view class="avatar_box scale2">
+				<button open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+					<image :src="user.avatar || '/static/images/tabbar/mine.png'" mode="widthFix" />
+				</button>
+				<!-- <image :src="user.avatar" mode="widthFix" />  @click="navTo(`/pages/mine/info/index`)"-->
 			</view>
 
 			<view class="login_box" @click="navTo(`/pages/mine/info/index`)">
@@ -72,11 +75,11 @@
 					<view class="item" :class="{'active':tabIndex == 1}" @click="changeTab(1)">赞同</view>
 					<view class="item" :class="{'active':tabIndex == 2}" @click="changeTab(2)">历史</view>
 				</view>
-				
+
 				<view class="search_box" @click="navTo('/pages/common/search/index')">
 					<!-- <uni-icons type="search" size="24"></uni-icons> -->
 				</view>
-				
+
 			</view>
 
 			<view class="subTab_box" v-if="tabIndex == 0">
@@ -87,17 +90,25 @@
 			</view>
 
 			<view class="list_1" v-if="tabIndex == 0 && subTabIndex1 == 0">
-				<view class="item" v-for="item in articleList" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
+				<view class="item" v-for="item in articleList"
+					@click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
 					<view class="content">
 						<view class="title">{{ item.paperInfo.title || ''}}</view>
 						<view class="bottom">
 							<text>{{ item.createTime | formatDate}}</text>
-							<text>{{ item.paperInfo.authors }}</text>
+							<!-- <text>{{ item.paperInfo.authors }}</text> -->
 						</view>
 					</view>
-					<view class="thumb">
-						<image :src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'" mode="aspectFill"></image>
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+						<image
+							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
+							mode="widthFix"></image>
 					</view>
+				</view>
+
+				<view class="nodata" v-if="articleList.length == 0">
+					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png"
+						mode="widthFix"></image>
 				</view>
 			</view>
 
@@ -114,8 +125,16 @@
 								<text class="title">{{item.name}}</text>
 								<view class="image_list">
 									<view class="image_item" v-for="subItem in item.favoriteDetails.slice(0,4)">
-										<image src="https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430" mode="widthFix">
+										<!-- <image
+											src="https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430"
+											mode="widthFix"></image> -->
+										<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${subItem.paperInfo.id}`)" v-if="subItem.paperInfo.imgUrl">
+											<image
+												:src="config.staticUrl + subItem.paperInfo.imgUrl.split(',')[0]"
+												mode="widthFix"></image>
+										</view>
 									</view>
+									
 								</view>
 								<view class="bot b-t">
 									<text>查看更多</text>
@@ -125,19 +144,33 @@
 						</view>
 					</view>
 				</view>
+
+				<view class="nodata" v-if="albumList.length == 0">
+					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png"
+						mode="widthFix"></image>
+				</view>
 			</view>
 
 			<view class="list" v-if="tabIndex == 1">
 				<view class="item" v-for="item in approveList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-						<image :src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'" mode="widthFix"></image>
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+						<image
+							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
+							mode="widthFix"></image>
 					</view>
-					<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">{{ item.paperInfo.title || '' }}
+					<!-- <view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
+						{{ item.paperInfo.title || '' }}
+					</view> -->
+					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+						{{ item.paperInfo.title }}
+					</view>
+					<view class="title color" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)"
+						v-if="item.summary[0]">{{ item.paperInfo.summary[0].titleZh }}
 					</view>
 					<view class="bottom">
 						<view class="source_box">
 							<!-- <image :src="item.avatar" mode="widthFix" class="avatar"></image> -->
-							<text>{{ item.paperInfo.authors || ''}}</text>
+							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
 						</view>
 						<view class="btn_box">
 							<!-- <view class="btn" v-if="item.isJoin">加入待阅</view>
@@ -146,6 +179,8 @@
 						</view>
 					</view>
 				</view>
+
+
 			</view>
 
 			<view class="subTab_box" v-if="tabIndex == 2">
@@ -155,15 +190,24 @@
 
 			<view class="list" v-if="tabIndex == 2 && subTabIndex2 == 0">
 				<view class="item" v-for="item in sHistoryList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-						<image :src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'" mode="widthFix"></image>
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+						<image
+							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
+							mode="widthFix"></image>
 					</view>
-					<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">{{ item.paperInfo.title }}
+					<!-- <view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
+						{{ item.paperInfo.title }}
+					</view> -->
+					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+						{{ item.paperInfo.title }}
+					</view>
+					<view class="title color" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)"
+						v-if="item.summary[0]">{{ item.paperInfo.summary[0].titleZh }}
 					</view>
 					<view class="bottom">
 						<view class="source_box">
 							<!-- <image :src="item.avatar" mode="widthFix" class="avatar"></image> -->
-							<text>{{ item.paperInfo.authors || ''}}</text>
+							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
 						</view>
 						<view class="btn_box">
 							<!-- <view class="btn" v-if="item.isJoin">加入待阅</view>
@@ -172,19 +216,29 @@
 						</view>
 					</view>
 				</view>
+
 			</view>
-			
+
 			<view class="list" v-if="tabIndex == 2 && subTabIndex2 == 1">
 				<view class="item" v-for="item in zHistoryList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-						<image :src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'" mode="widthFix"></image>
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+						<image
+							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
+							mode="widthFix"></image>
 					</view>
-					<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">{{ item.paperInfo.title }}
+					<!-- <view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
+						{{ item.paperInfo.title }}
+					</view> -->
+					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+						{{ item.paperInfo.title }}
+					</view>
+					<view class="title color" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)"
+						v-if="item.summary[0]">{{ item.paperInfo.summary[0].titleZh }}
 					</view>
 					<view class="bottom">
 						<view class="source_box">
 							<!-- <image :src="item.avatar" mode="widthFix" class="avatar"></image> -->
-							<text>{{ item.paperInfo.authors || ''}}</text>
+							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
 						</view>
 						<view class="btn_box">
 							<!-- <view class="btn" v-if="item.isJoin">加入待阅</view>
@@ -193,8 +247,8 @@
 						</view>
 					</view>
 				</view>
+
 			</view>
-			
 		</view>
 		<uni-drawer ref="showLeft" mode="left" :width="220" @change="change($event,'showLeft')">
 			<!-- 状态栏占位 -->
@@ -203,7 +257,7 @@
 			<view class="logo_box">
 				<view class="logo">
 					<image src="/static/logo.png" mode="widthFix"></image>
-					<text>筑园科技</text>
+					<text>量拾</text>
 				</view>
 				<uni-icons type="closeempty" size="18" color="#999" @click="closeDrawer('showLeft')"></uni-icons>
 			</view>
@@ -232,18 +286,49 @@
 					<text>用户反馈</text>
 					<uni-icons type="forward" size="16" color="#999"></uni-icons>
 				</view>
+				<view class="item" @click="navTo(`/pages/public/protocol`)">
+					<text>用户协议</text>
+					<uni-icons type="forward" size="16" color="#999"></uni-icons>
+				</view>
+
+				<view class="item" @click="navTo(`/pages/public/privacy`)">
+					<text>隐私政策</text>
+					<uni-icons type="forward" size="16" color="#999"></uni-icons>
+				</view>
+
+				<view class="item" @click="handleLogout">
+					<text>退出登录</text>
+					<uni-icons type="forward" size="16" color="#999"></uni-icons>
+				</view>
+
 			</view>
 
 		</uni-drawer>
 
+		<view class="nodata" v-if="approveList.length == 0 && tabIndex == 1 && user.openId">
+			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix">
+			</image>
+		</view>
+
+		<view class="nodata" v-if="sHistoryList.length == 0 && tabIndex == 2 && subTabIndex2 == 0 && user.openId">
+			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix">
+			</image>
+		</view>
+
+		<view class="nodata" v-if="zHistoryList.length == 0 && tabIndex == 2 && subTabIndex2 == 1 && user.openId">
+			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix">
+			</image>
+		</view>
 	</view>
 </template>
 
 <script>
+	import config from '@/config'
 	import {
 		getUser,
 		setUser,
-		removeUser,
+		removeToken,
+		removeUser
 	} from '@/utils/auth'
 
 	import {
@@ -255,6 +340,11 @@
 		scarchFavoritePaper
 	} from '@/api/mine/index.js'
 
+	import {
+		insertWxUser,
+		getOpenId
+	} from '@/api/login.js'
+
 	export default {
 		filters: {
 			formatDate(time) {
@@ -262,7 +352,7 @@
 					return ' '
 				} else {
 					// String localDate = LocalDateTime.parse(time,DateTimeFormatter.ISO_OFFSET_DATE_TIME).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-					
+
 					// return localDate;
 					return time.substr(0, 19).replace('T', ' ').replace(/-/g, '.');
 					// const timeLen = time.length; //传入的时候时间戳类型应为字符串，因为要根据length判断是10/13的时间戳
@@ -284,9 +374,10 @@
 		},
 		data() {
 			return {
+				config:config,
 				tabIndex: 1,
 				subTabIndex1: 1,
-				subTabIndex2: 1,
+				subTabIndex2: 0,
 				showLeft: false,
 				statusBarHeight: 40,
 				user: {},
@@ -307,7 +398,7 @@
 				},
 				articleList: [],
 				articleQuery: {
-					favoriteId:'',
+					favoriteId: '',
 					pageNum: 1,
 					pageSize: 10,
 				},
@@ -340,34 +431,36 @@
 			this.approveList = [];
 			this.articleList = [];
 			this.albumList = [];
-			this.sHistoryQuery={
+			this.sHistoryQuery = {
 				pageNum: 1,
 				pageSize: 10
 			};
-			this.zHistoryQuery={
+			this.zHistoryQuery = {
 				pageNum: 1,
 				pageSize: 10
 			};
-			this.approveQuery={
+			this.approveQuery = {
 				pageNum: 1,
 				pageSize: 10
 			};
-			this.articleQuery={
-				favoriteId:'',
+			this.articleQuery = {
+				favoriteId: '',
 				pageNum: 1,
 				pageSize: 10,
 			};
-			this.albumQuery={
+			this.albumQuery = {
 				pageNum: 1,
 				pageSize: 10
 			};
-			this.user = JSON.parse(getUser()) || {};
-			this.getSearchMyLike();
-			this.getSearchHistory();
-			this.getSearchSummaryHistory();
-			this.getStatistic();
-			this.getScarchFavorite();
-			this.getScarchFavoritePaper();
+			if (getUser()) {
+				this.user = JSON.parse(getUser()) || {};
+				this.getSearchMyLike();
+				this.getSearchHistory();
+				this.getSearchSummaryHistory();
+				this.getStatistic();
+				this.getScarchFavorite();
+				this.getScarchFavoritePaper();
+			}
 		},
 		// onNavigationBarButtonTap(e) {
 		// 	if (this.showLeft) {
@@ -397,30 +490,30 @@
 			// 	that.query.pageNum++; //页数加一
 			// 	that.getArticles(); //回调接口
 			// }
-			
-			if(tabIndex == 0){
-				if(subTabIndex1 == 1){
+
+			if (tabIndex == 0) {
+				if (subTabIndex1 == 1) {
 					that.articleQuery.pageNum++; //页数加一
 					that.getScarchFavoritePaper();
 				}
-				
-				if(subTabIndex2 == 2){
+
+				if (subTabIndex2 == 2) {
 					// that.getScarchFavorite();
 				}
 			}
-			
-			if(tabIndex == 1){
+
+			if (tabIndex == 1) {
 				that.approveQuery.pageNum++; //页数加一
 				that.getSearchMyLike();
 			}
-			
-			if(tabIndex == 2){
-				if(subTabIndex2 == 1){
+
+			if (tabIndex == 2) {
+				if (subTabIndex2 == 1) {
 					that.sHistoryQuery.pageNum++; //页数加一
 					that.getSearchHistory();
 				}
-				
-				if(subTabIndex2 == 2){
+
+				if (subTabIndex2 == 2) {
 					that.zHistoryQuery.pageNum++; //页数加一
 					that.getSearchSummaryHistory();
 				}
@@ -435,10 +528,48 @@
 			}
 		},
 		methods: {
+			resetData(){
+				this.sHistoryQuery = {
+					pageNum: 1,
+					pageSize: 10
+				};
+				this.sHistoryList = [];
+				this.zHistoryQuery =  {
+					pageNum: 1,
+					pageSize: 10
+				};
+				this.zHistoryList = [],
+				this.approveList =  [],
+				this.approveQuery =  {
+					pageNum: 1,
+					pageSize: 10
+				};
+				this.articleList =  [];
+				this.articleQuery =  {
+					favoriteId: '',
+					pageNum: 1,
+					pageSize: 10,
+				};
+				this.albumList =  [];
+				this.albumQuery =  {
+					pageNum: 1,
+					pageSize: 10
+				};
+			},
+			onChooseAvatar(e) {
+				var that = this;
+				const {
+					avatarUrl
+				} = e.detail;
+
+				that.user.avatar = avatarUrl;
+
+				that.submit();
+			},
 			getScarchFavorite() {
 				var that = this;
 				scarchFavorite({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					// pageNum: that.approveQuery.pageNum,
 					// pageSize: that.approveQuery.pageSize,
@@ -449,7 +580,7 @@
 			getScarchFavoritePaper() {
 				var that = this;
 				scarchFavoritePaper({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					favoriteId: that.articleQuery.favoriteId || 0,
 					pageNum: that.articleQuery.pageNum,
@@ -461,7 +592,7 @@
 			getSearchMyLike() {
 				var that = this;
 				searchMyLike({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					pageNum: that.approveQuery.pageNum,
 					pageSize: that.approveQuery.pageSize,
@@ -472,7 +603,7 @@
 			getStatistic() {
 				var that = this;
 				statistic({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 				}).then(response => {
 					that.report = response;
@@ -481,7 +612,7 @@
 			getSearchHistory() {
 				var that = this;
 				searchHistory({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					pageNum: that.sHistoryQuery.pageNum,
 					pageSize: that.sHistoryQuery.pageSize,
@@ -492,7 +623,7 @@
 			getSearchSummaryHistory() {
 				var that = this;
 				searchSummaryHistory({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					email: that.user.email || '',
 					pageNum: that.zHistoryQuery.pageNum,
@@ -502,8 +633,20 @@
 				})
 			},
 			changeSubTab(type, index) {
+				var that = this;
 				if (type == 0) {
 					this.subTabIndex1 = index;
+					
+					this.resetData();
+					this.getStatistic();
+					
+					if(this.subTabIndex1 == 0){
+						this.getScarchFavoritePaper();
+					}
+					
+					if(this.subTabIndex1 == 1){
+						this.getScarchFavorite();
+					}
 					
 					// if(this.subTabIndex1 == 1){
 					// 	this.articleList = [];
@@ -513,7 +656,7 @@
 					// 	}
 					// 	this.getScarchFavoritePaper();
 					// }
-					
+
 					// if(this.subTabIndex1 == 2){
 					// 	this.albumList = [];
 					// 	this.albumQuery = {
@@ -527,6 +670,28 @@
 				if (type == 2) {
 					this.subTabIndex2 = index;
 					
+					if(this.subTabIndex2 == 0){
+						this.getSearchHistory();
+					}
+					
+					if (index == 1 && ! this.user.email) {
+						uni.showModal({
+							title: '提示',
+							content: "请进行邮箱绑定！",
+							cancelText: '取消',
+							confirmText: '确定',
+							success: function(res) {
+								if(res.confirm){
+									that.navTo('/pages/mine/info/bindEmail');
+								}
+							}
+						})
+						
+						return false;
+					}else{
+						this.searchSummaryHistory();
+					}
+					
 					// if(this.subTabIndex2 == 1){
 					// 	this.sHistoryList = [];
 					// 	this.sHistoryQuery = {
@@ -535,7 +700,7 @@
 					// 	}
 					// 	this.getSearchHistory();
 					// }
-					
+
 					// if(this.subTabIndex2 == 2){
 					// 	this.zHistoryList = [];
 					// 	this.zHistoryQuery = {
@@ -544,7 +709,7 @@
 					// 	}
 					// 	this.getSearchSummaryHistory();
 					// }
-					
+
 				}
 			},
 			changeTab(index) {
@@ -553,7 +718,20 @@
 				}
 
 				this.tabIndex = index;
-
+				this.resetData();
+				this.getStatistic();
+				
+				if(this.tabIndex == 0){
+					this.getScarchFavorite();
+				}
+				
+				if(this.tabIndex == 1){
+					this.getSearchMyLike();
+				}
+				
+				if(this.tabIndex == 2){
+					this.getSearchHistory();
+				}
 				// if(this.tabIndex == 0){
 				// 	this.articleList = [];
 				// 	this.articleQuery = {
@@ -562,7 +740,7 @@
 				// 	}
 				// 	this.getScarchFavoritePaper();
 				// }
-				
+
 				// if(this.tabIndex == 1){
 				// 	this.approveList = [];
 				// 	this.approveQuery = {
@@ -571,7 +749,7 @@
 				// 	}
 				// 	this.getSearchMyLike();
 				// }
-				
+
 				// if(this.tabIndex == 2){
 				// 	this.zHistoryList = [];
 				// 	this.zHistoryQuery = {
@@ -580,7 +758,7 @@
 				// 	}
 				// 	this.getSearchHistory();
 				// }
-			
+
 				// 	if (this.tabIndex == 0) {
 				// 		this.animationSetting[1].modeClass = ['fade', 'slide-right'];
 				// 		this.animationSetting[1].show = false;
@@ -653,15 +831,43 @@
 				})
 			},
 			submit(ref) {
-				this.$refs.form.validate().then(res => {
-					updateUserProfile(this.user).then(response => {
-						this.$modal.msgSuccess("修改成功")
-					})
+				var that = this;
+				insertWxUser({
+					avatar: that.user.avatar,
+					city: that.user.city,
+					// country: that.weixin.country,
+					gender: that.user.gender,
+					nickName: that.user.nickName,
+					openId: that.user.openId,
+					// province: that.weixin.province,
+					unionId: that.user.unionId,
+					phone: that.user.phone,
+					// email:that.user.email,
+					birthday: that.user.birthday,
+					educational: that.user.educational,
+					interest: that.user.interest,
+					intro: that.user.intro,
+				}).then(response => {
+					response.id = parseInt(response.id);
+					setUser(JSON.stringify(response));
+					that.navSwitchPage('/pages/mine');
 				})
+				// this.$refs.form.validate().then(res => {
+				// 	updateUserProfile(this.user).then(response => {
+				// 		this.$modal.msgSuccess("修改成功")
+				// 	})
+				// })
 			},
 			navTo(url) {
 				this.$refs.showLeft.close();
 				this.$tab.navigateTo(url)
+			},
+			handleLogout() {
+				this.$modal.confirm('确定注销并退出系统吗？').then(() => {
+					removeToken();
+					removeUser();
+					this.$tab.reLaunch('/pages/index')
+				})
 			}
 		}
 	}
@@ -669,7 +875,7 @@
 
 <style lang="scss">
 	.page {
-		background-image: url("http://template.newjiabo.com/chatPaper/images/mine/bg.png");
+		background-image: url("https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/mine-chatpaper-bg.png");
 		background-repeat: no-repeat;
 		background-size: 100% auto;
 	}
@@ -759,6 +965,12 @@
 		padding-top: 20rpx;
 		margin-top: 20rpx;
 
+		.scale2 {
+			image {
+				transform: scale(2);
+			}
+		}
+
 		.avatar_box {
 			width: 120rpx;
 			height: 120rpx;
@@ -767,11 +979,29 @@
 			border-radius: 50%;
 			border: 4rpx solid #fff;
 			box-sizing: border-box;
+			overflow: hidden;
 
 			image {
 				border-radius: 50%;
 				width: 120rpx;
 				height: 120rpx;
+
+			}
+
+			button {
+				width: 114rpx;
+				height: 114rpx;
+				border: none;
+				background: none !important;
+				outline: none;
+				display: flex;
+				align-items: center;
+				// margin-top: -2px;
+				// margin-left: -2rpx;
+			}
+
+			button::after {
+				border: none;
 			}
 		}
 
@@ -886,15 +1116,15 @@
 
 			.title {
 				width: 100%;
-				max-height: 86rpx;
+				// max-height: 86rpx;
 				padding: 10rpx 15rpx;
 				color: #333;
 				word-break: normal;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				-webkit-line-clamp: 2;
-				display: -webkit-box;
-				-webkit-box-orient: vertical
+				// overflow: hidden;
+				// text-overflow: ellipsis;
+				// -webkit-line-clamp: 2;
+				// display: -webkit-box;
+				// -webkit-box-orient: vertical
 			}
 
 			.bottom {
@@ -1124,6 +1354,7 @@
 	}
 
 	.no-login {
+		margin-top: 100rpx;
 		color: #999;
 		text-align: center;
 

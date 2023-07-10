@@ -1,13 +1,17 @@
 <template>
 	<view class="container">
 		<view class="example">
-			<!-- <view class="photo-box">
-				<image src="/static/images/tabbar/mine.png" mode="widthFix" @click="navTo(`/pages/mine/avatar/index`)">
-				</image>
-			</view> -->
+			<view class="photo-box">
+				<button open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+					<image :src="user.avatar || '/static/images/tabbar/mine.png'" mode="widthFix" />
+				</button>
+				<!-- <image src="/static/images/tabbar/mine.png" mode="widthFix" @click="navTo(`/pages/mine/avatar/index`)">
+				</image> -->
+			</view>
 			<uni-forms ref="form" :model="user" labelWidth="80px">
 				<uni-forms-item label="用户昵称" name="nickName">
-					<uni-easyinput v-model="user.nickName" placeholder="请输入昵称" clearable />
+					<!-- <input type="nickname" v-model="user.nickName" @blur="getNickName"> -->
+					<uni-easyinput ref="nickname" :value="user.nickName" v-model="user.nickName" type="nickname" name="nickname" placeholder="请输入昵称" id="nickname-input" clearable @blur="getNickName"/>
 				</uni-forms-item>
 				<uni-forms-item label="手机号码" name="phone">
 					<!-- <uni-easyinput v-model="user.phonenumber" placeholder="请输入手机号码" suffixIcon="search" clearable
@@ -46,7 +50,7 @@
 					<uni-easyinput type="textarea" v-model="user.intro" placeholder="请输入个人介绍" clearable />
 				</uni-forms-item>
 			</uni-forms>
-			<button type="primary" @click="submit" style="background-color: #3B00FF;">提交</button>
+			<button type="primary" form-type="submit" @click="submit" style="background-color: #3B00FF;">提交</button>
 		</view>
 	</view>
 </template>
@@ -57,13 +61,14 @@
 		getUser,
 		setUser,
 		removeUser,
+		setToken
 	} from '@/utils/auth'
 	import {
 		insertWxUser,
 		getOpenId
 	} from '@/api/login.js'
 	import config from '@/config'
-	
+
 	export default {
 		data() {
 			return {
@@ -169,12 +174,39 @@
 		},
 		onShow() {
 			var that = this;
-			that.user = JSON.parse(getUser()) || {}
+			if (getUser()) {
+				that.user = JSON.parse(getUser()) || {}
+			}
 		},
 		onReady() {
 			// this.$refs.form.setRules(this.rules)
 		},
 		methods: {
+			getNickName(e){
+				var that = this;
+				that.user.nickName = e.detail.value || '';
+				 // setTimeout(function(){
+					// uni.createSelectorQuery().in(that) // 注意这里要加上 in(this)
+					//     .select("#nickname-input")  
+					//     .fields({  
+					//         properties: ["value"],  
+					//     })  
+					//     .exec((res) => {  
+					// 		console.log(that.$refs.nickname.value);
+					//         const nickName = res?.[0]?.value  
+					//         console.log('昵称', nickName);
+					// 		  that.user.nickName = nickName;
+					//     }) 
+				 // },1500)
+			},
+			onChooseAvatar(e) {
+				var that = this;
+				const {
+					avatarUrl
+				} = e.detail;
+				
+				that.user.avatar = avatarUrl;
+			},
 			getWeixinCode() {
 				var that = this;
 				uni.login({
@@ -194,6 +226,8 @@
 					that.weixin.openid = response.openid;
 					that.weixin.openId = response.openid;
 					that.weixin.session_key = response.session_key;
+					that.weixin.token = response.token;
+					setToken(response.token);
 					// that.getWeixinCode();
 				})
 			},
@@ -204,7 +238,6 @@
 				if (!that.weixin.code || !e.detail.encryptedData) {
 					return false;
 				}
-
 				that.weixin.encryptedData = e.detail.encryptedData;
 				that.weixin.iv = e.detail.iv;
 				var pc = new WXBizDataCrypt(config.appId, that.weixin.session_key)
@@ -241,8 +274,14 @@
 					this.user = response.data
 				})
 			},
-			submit(ref) {
+			formSubmit (e) {
+				console.log(e);
+			},
+			submit(e) {
+				
 				var that = this;
+				console.log(that.user.nickname)  
+				debugger
 				insertWxUser({
 					avatar: that.user.avatar,
 					city: that.user.city,
@@ -253,13 +292,14 @@
 					// province: that.weixin.province,
 					unionId: that.user.unionId,
 					phone: that.user.phone,
-					// email:that.user.email,
-					birthday:that.user.birthday,
-					educational:that.user.educational,
+					email:that.user.email,
+					birthday: that.user.birthday,
+					educational: that.user.educational,
 					interest: that.user.interest,
 					intro: that.user.intro,
 				}).then(response => {
 					response.id = parseInt(response.id);
+					response.token = that.weixin.token;
 					setUser(JSON.stringify(response));
 					that.navSwitchPage('/pages/mine');
 				})
@@ -318,6 +358,16 @@
 		}
 
 		margin-bottom: 10rpx;
+
+		button {
+			border: none;
+			background: none !important;
+			outline: none;
+		}
+
+		button::after {
+			border: none;
+		}
 	}
 
 	.button-group {

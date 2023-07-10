@@ -70,7 +70,8 @@
 			/** label字段 **/
 			label:{
 				type:String,
-				default:"searchKeywords"
+				// default:"searchKeywords"
+				default:"keywordShort"
 			},
 			/** 左右间距 **/
 			padding:{

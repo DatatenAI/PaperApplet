@@ -12,6 +12,10 @@
 				</view>
 			</view>
 		</view>
+		
+		<view class="nodata" v-if="announceList.length == 0">
+			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+		</view>
 	</view>
 </template>
 
@@ -65,7 +69,9 @@
 		onShow() {
 			var that = this;
 			that.announceList = [];
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 			that.getNotice();
 			// that.getSubscribe();
 			// that.getMySubscribe();
@@ -83,7 +89,7 @@
 			getNotice() {
 				var that = this;
 				searchInform({
-					// userId: that.user.id || '',
+					// userId: that.user.id || null,
 					// openId: that.user.openId || '',
 					// keywords: that.query.keywords,
 					pageNum: that.query.pageNum,

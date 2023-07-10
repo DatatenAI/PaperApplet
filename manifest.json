@@ -86,7 +86,12 @@
         "optimization" : {
             "subPackages" : true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {
+            "scope.pdf" : {
+                "desc" : "于预览 PDF文件"
+            }
+        }
     },
     "vueVersion" : "2",
     "h5" : {

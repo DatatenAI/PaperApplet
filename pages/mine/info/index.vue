@@ -6,7 +6,7 @@
 		</view> -->
 		<uni-list>
 			<uni-list-item showExtraIcon="true" :rightText="'头像'" :showArrow="true" :thumb="user.avatar" thumb-size="lg"
-				clickable />
+				clickable  @click="navTo(`/pages/mine/info/edit`)" />
 			<uni-list-item :showArrow="true" showExtraIcon="true" :extraIcon="{type: 'person-filled'}" title="用户昵称"
 				:rightText="user.nickName" clickable @click="navTo(`/pages/mine/info/edit`)" />
 			<uni-list-item :showArrow="true" showExtraIcon="true" :extraIcon="{type: 'phone-filled'}" title="手机号码"
@@ -48,7 +48,9 @@
 		onLoad() {},
 		onShow() {
 			var that = this;
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 		},
 		methods: {
 			navTo(url) {

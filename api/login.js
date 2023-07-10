@@ -4,9 +4,6 @@ import request from '@/utils/request'
 export function insertWxUser(data) {
   return request({
     url: '/api/trpc/weapp.insertWxUser',
-    headers: {
-      isToken: false
-    },
     method: 'post',
 	data: data,
     timeout: 20000

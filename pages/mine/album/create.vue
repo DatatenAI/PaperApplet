@@ -33,13 +33,15 @@
 		onReady() {},
 		onShow() {
 			var that = this;
-			that.user = JSON.parse(getUser()) || {};
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			};
 		},
 		methods: {
 			submit(ref) {
 				var that = this;
 				addFavorite({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					favoriteName: that.form.favoriteName,
 				}).then(response => {

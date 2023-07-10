@@ -1,7 +1,8 @@
 <template>
 	<view class="content">
 		<image src="/static/logo200.png" mode="widthFix" class="logo"></image>
-		<view class="login_btn"><button open-type="getUserInfo" @click="getUserProfile">微信用户一键登录</button></view>
+		<view class="login_btn"><button open-type="getUserInfo" @click="getUserProfile">授权登录</button></view>
+		<!-- <view class="login_btn"><button open-type="chooseAvatar" @chooseavatar="onChooseAvatar">授权登录</button></view> -->
 		<view class="login_back" @click="navSwitchPage('/pages/mine')">退出登录</view>
 		<view class="hint">
 			<label @click="checkboxChange">
@@ -29,6 +30,7 @@
 	} from '@/api/system/index.js'
 	import {
 		setUser,
+		setToken
 	} from '@/utils/auth.js'
 	var WXBizDataCrypt = require('@/utils/WXBizDataCrypt');
 
@@ -40,6 +42,7 @@
 				staticUrl: config.staticUrl,
 				sex:['未知','男','女'],
 				weixin: {
+					token:'',
 					code: '',
 					unionId: '',
 					avatar: '',
@@ -87,6 +90,8 @@
 				}).then(response => {
 					that.weixin.openId = response.openid;
 					that.weixin.session_key = response.session_key;
+					that.weixin.token = response.token;
+					setToken(response.token);
 					// that.getWeixinCode();
 				})
 			},
@@ -121,6 +126,10 @@
 					})
 				}, 1500)
 			},
+			// onChooseAvatar(e){
+			// 	debugger
+			// 	 const { avatarUrl } = e.detail;
+			// },
 			getUserProfile(e) {
 				var that = this;
 				if (!that.agree) {
@@ -150,7 +159,6 @@
 				})
 			},
 			saveWeixinInfo() {
-				
 				var that = this;
 				insertWxUser({
 					avatar: that.weixin.avatar,
@@ -168,6 +176,7 @@
 					interest: '',
 				}).then(response => {
 					response.id = parseInt(response.id);
+					response.token = that.weixin.token;
 					setUser(JSON.stringify(response));
 					that.navSwitchPage('/pages/mine');
 				})

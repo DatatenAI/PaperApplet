@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="./js/vue.js"></script>
+		<script src="./js/jweixin-1.6.0.js"></script>
+		<script src="./js/httpVueLoader.js"></script>
+		<script src="./js/axios.min.js"></script>
+		<script src="./js/jquery.min.js"></script>
+		<script src="./js/html2canvas.min.js"></script>
+		<script src="./js/canvas2image.js"></script>
+		<script src="./js/base64.js"></script>
+		<!-- <script src="./js/jquery.markdown.js"></script> -->
+		<link href="./styles/style.css" rel="stylesheet" />
+		<title>海报生成</title>
+	</head>
+	<body>
+		<div id="app">
+			<div id="poster_box" class="poster_box">
+				<div class="container">
+					<!-- <img :src="images"> -->
+					<div class="header">
+						<div class="source_box">
+							<div class="source_info">
+								<img src="./images/logo.png">
+								<div class="nickname">{{paparInfo.detail.searchFrom}}</div>
+							</div>
+							<div class="date">来自量拾：{{paparInfo.detail.pubTime.substring(0,10)}}</div>
+						</div>
+						<div class="ewm">
+							<img :src="'data:image/png;base64,'+ paparInfo.qrcode" width="100%">
+							<p>扫描查看全文</p>
+						</div>
+					</div>
+					<div class="title_box">
+						<div class="title-zh">
+							{{paparInfo.detail.summary[0].titleZh}}
+						</div>
+
+						<div class="title-en">
+							{{paparInfo.detail.title}}
+						</div>
+					</div>
+					<div class="section">
+						<h2>
+							论文简要：
+						</h2>
+
+						<div class="content">
+							{{paparInfo.detail.summary[0].briefIntroduction}}
+						</div>
+					</div>
+					<!-- <div class="section"> -->
+					<!-- <h2> -->
+					<!-- 背景信息： -->
+					<!-- </h2> -->
+
+					<!-- <div class="content"> -->
+					<!-- ceshi ceshiceshiceshiceshiceshiceshiceshiceshiceshiceshi -->
+					<!-- </div> -->
+					<!-- </div> -->
+					<div class="user-info">
+						<img :src="paparInfo.wxuser.avatar">
+						<div class="info">
+							<p>用户{{paparInfo.wxuser.nickName}}分享</p>
+							<p>这是TA阅读的第{{paparInfo.history}}篇文献</p>
+						</div>
+					</div>
+					<div class="split-line">
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+						<p></p>
+					</div>
+					<div class="tips">
+						<p>量拾：打破信息焦虑·提升认知</p>
+						<img src="./images/logo200.png" width="48">
+					</div>
+					<div class="ewm_box">
+						<div class="item">
+							<img src="./images/ewm.jpg" width="60">
+							<div class="des">
+								<p>关注公众号</p>
+								<p>打破信息焦虑</p>
+								<p>提升认知之旅</p>
+							</div>
+						</div>
+						<div class="item">
+							<img :src="'data:image/png;base64,'+ paparInfo.qrcode" width="60">
+							<div class="des">
+								<p>扫一扫查看</p>
+								<p>文章总结信息</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a href="javascript:void(0)" id="btn">保存为图片</a>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			// canvas生成图片
+			$("#btn").on("click", function() {
+				const targetDom = document.getElementById("poster_box");
+				// 使用html2canvas 转换html为canvas
+				// 获取节点高度，后面为克隆节点设置高度。
+				var height = document.querySelector('#poster_box').offsetHeight
+				// 克隆节点，默认为false，不复制方法属性，为true是全部复制。
+				var cloneDom = document.querySelector('#poster_box').cloneNode(true);
+				// 设置克隆节点的style属性，因为之前的层级为0，我们只需要比被克隆的节点层级低即可。
+				cloneDom.style.height = height + "px";
+				cloneDom.style.zIndex = '-1';
+				// 将克隆节点动态追加到body后面。
+				document.querySelector('body').append(cloneDom)
+				// 插件生成base64img图片。
+				html2canvas(cloneDom).then(function(canvas) {
+					var imgUri = canvas.toDataURL('image/png').replace('image/png',
+						'image/octet-stream') // 获取生成的图片的url
+					wx.miniProgram.postMessage({
+						data: {
+							imgData: imgUri // 刚才拿到的base64 数据
+						}
+					})
+
+					wx.miniProgram.navigateBack({
+						delta: 1
+					}) //注意这里.
+
+					// var saveLink = document.createElement('a')
+					// saveLink.href = imgUri
+					// saveLink.download = Date.parse(new Date()) + '.png'
+					// saveLink.click()
+				})
+				// 移除复制的节点
+				document.querySelector('body').removeChild(cloneDom)
+			});
+		})
+	</script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				args: "Hello World",
+				images: '',
+				paparInfo: {
+					detail: {
+						title: '',
+						searchFrom: '',
+						pubTime: '',
+						summary: [{
+							briefIntroduction: '',
+							titleZh: '',
+						}]
+					},
+					history: 0,
+					qrcode: '',
+					wxuser: {
+						avatar: '',
+						nickName: '',
+					}
+				},
+				query: {
+					paparId: '',
+					openId: "",
+				}
+			},
+			mounted() {
+				console.log("测试");
+				this.query = this.GetQueryJson1();
+				this.getInfo();
+				//this.getWxCode();
+			},
+			methods: {
+				parseParams(data) {
+					try {
+						var tempArr = [];
+						for (var i in data) {
+							var key = encodeURIComponent(i);
+							var value = encodeURIComponent(data[i]);
+							tempArr.push(key + '=' + value);
+						}
+						var urlParamsStr = tempArr.join('&');
+						return urlParamsStr;
+					} catch (err) {
+						return '';
+					}
+				},
+				GetQueryJson1() {
+					let url = window.location.search; // 获取当前浏览器的URL (redirect=>根据自己的业务去写)
+					let arr = []; // 存储参数的数组
+					let res = {}; // 存储最终JSON结果对象
+					// 第一次正常登陆 可能是undefined
+					if (url) {
+						if (url.split('?')[1]) {
+							arr = url.split('?')[1].split('&'); // 获取浏览器地址栏中的参数
+						}
+						for (let i = 0; i < arr.length; i++) { // 遍历参数
+							if (arr[i].indexOf('=') != -1) { // 如果参数中有值
+								let str = arr[i].split('=');
+								res[str[0]] = str[1];
+							} else { // 如果参数中无值
+								res[arr[i]] = '';
+							}
+						}
+						// 如果是空对象{} 表明是第一次登陆
+						if (JSON.stringify(res) == "{}") {
+							return false;
+						} else {
+							return res;
+						}
+					} else {
+						return false
+					}
+				},
+				getInfo() {
+					var that = this;
+					var reqBody = {
+						batch: 1,
+						input: JSON.stringify({
+							"0": {
+								"json": {
+									paperId: parseInt(this.query.id),
+									openId: this.query.openId
+								}
+							}
+						}),
+					}
+
+					axios({
+						method: "get",
+						// url: "https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run/api/trpc/weapp.getQrcode",
+						url: "/api/trpc/weapp.getQrcode?" + this.parseParams(reqBody),
+						dataType: 'json'
+					}).then(function(res) {
+						that.paparInfo = res.data[0].result.data.json;
+						console.log(that.paparInfo);
+					});
+				},
+				getToken() {
+					axios({
+						method: "get",
+						url: "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx93f94152c830f126&secret=ef67e457daba3939339c8063e4d18350",
+					}).then(function(res) {
+						console.log(res);
+					});
+				},
+				getWxCode() {
+					var that = this;
+					var access_token =
+						"70_5-3wKMgiWH7K61JDzZjQ5jwra1Ks-xkzj4Vt8D2HDS_aw3VyrmP8fHyyA5w4w9EQ3OtP2ua86JArggo--eNlsTRTWO0dsGy19M_JhAeZmgD5JR3Y3NRmYkfo7ogFSSiAJAANN";
+					axios({
+						method: "post",
+						url: "/wxa/getwxacode?access_token=" + access_token,
+						responseType: 'arraybuffer', //设置响应类型
+						data: {
+							path: 'pages/home/detail/detail?id=24', // 必须是已经发布的小程序存在的页面（否则报错）
+							//scene: 'id=24',
+							//scene: encodeURIComponent('id=24'),//小程序端需要 decodeURIComponent(query.scene)
+							width: 360, //最小 280px，最大 1280px
+							auto_color: true, // 默认false, 自动配置线条颜色，如果颜色依然是黑色，则说明不建议配置主色调
+							env_version: "trial", //"trial" : "release",   //develop
+						},
+					}).then(function(res) {
+						// 返回的数据转图片
+						var binary = "";
+						var bytes = new Uint8Array(res.data);
+						var len = bytes.byteLength;
+						for (var i = 0; i < len; i++) {
+							binary += String.fromCharCode(bytes[i]);
+						}
+						var loginImageUrls = `data:image/png;base64,${window.btoa(binary)}`;
+						that.images = `data:image/png;base64,${window.btoa(binary)}`;
+						console.log(loginImageUrls);
+						//console.log('获取二维码信息', res) //返回的是ArrayBuffer对象
+						//const qrcode = "data:image/PNG;BASE64," + this.arrayBufferToBase64(res.data);
+						//console.log("base64的二维码图片地址", qrcode);
+					});
+				},
+				arrayBufferToBase64(buffer) {
+					var binary = '';
+					var bytes = new Uint8Array(buffer);
+					var len = bytes.byteLength;
+					for (var i = 0; i < len; i++) {
+						binary += String.fromCharCode(bytes[i]);
+					}
+					return window.btoa(binary);
+				}
+			}
+		})
+	</script>
+</html>

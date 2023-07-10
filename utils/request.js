@@ -1,13 +1,16 @@
 import store from '@/store'
 import config from '@/config'
 import {
+	getUser,
 	getToken
 } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 import {
 	toast,
 	showConfirm,
-	tansParams
+	tansParams,
+	showLoading,
+	hideLoading
 } from '@/utils/common'
 import qs from 'qs'
 
@@ -15,12 +18,16 @@ let timeout = 320000
 const baseUrl = config.baseUrl
 
 const request = config => {
+	showLoading();
 	// 是否需要设置 token
 	const isToken = (config.headers || {}).isToken === false
 	config.header = config.header || {}
-	// if (getToken() && !isToken) {
-	// 	config.header['Authorization'] = 'Bearer ' + getToken()
-	// }
+	if (getToken() && !isToken) {
+		// config.header['Authorization'] = 'Bearer ' + getToken()
+		// var user =  JSON.parse(getToken())  || {};
+		// debugger
+		config.header['Authorization'] = getToken();
+	}
 	// get请求映射params参数
 	if (config.params) {
 		let url = config.url + '?' + tansParams(config.params)
@@ -50,7 +57,8 @@ const request = config => {
 				}
 			}
 		}
-
+		// console.log(reqUrl);
+		// console.log(JSON.stringify(reqBody));
 		uni.request({
 				method: config.method || 'get',
 				timeout: config.timeout || timeout,
@@ -68,6 +76,8 @@ const request = config => {
 				header: config.header,
 				dataType: 'json'
 			}).then(response => {
+				hideLoading();
+				// console.log("test:" + JSON.stringify(response));
 				let [error, res] = response
 				if (error) {
 					toast('后端接口连接异常')
@@ -77,18 +87,26 @@ const request = config => {
 				const data = res.data[0];
 				const code = res.statusCode || 200
 				const msg = errorCode[code] || errorCode['default']
+				
 				if (code === 401) {
 					showConfirm('登录状态已过期，您可以继续留在该页面，或者重新登录?').then(res => {
 						if (res.confirm) {
-							store.dispatch('LogOut').then(res => {
-								uni.reLaunch({
-									url: '/pages/login'
-								})
+							uni.navigateTo({
+								url: '/pages/login'
 							})
+							// store.dispatch('LogOut').then(res => {
+							// 	uni.reLaunch({
+							// 		url: '/pages/login'
+							// 	})
+							// })
 						}
 					})
 					reject('无效的会话，或者会话已过期，请重新登录。')
-				} else if (code === 500) {
+				} else if (code === 403) {
+					toast(data.error.json.message)
+					return false;
+					// resolve(data.error.json);
+				}else if (code === 500) {
 					toast(msg)
 					reject('500')
 				} else if (code !== 200) {

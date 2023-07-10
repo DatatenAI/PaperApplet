@@ -6,10 +6,10 @@
 			</view>
 			<view class="name">
 				<view class="title">
-					chatPaper
+					量拾
 				</view>
 				<view class="title1">
-					chatPaper公众号
+					量拾公众号
 				</view>
 			</view>
 		</view>
@@ -22,7 +22,7 @@
 				公众号
 			</view>
 			<view class="title">
-				关注chatPaper公众号
+				关注量拾公众号
 			</view>
 			<view class="tip">
 				<view class="line"></view>
@@ -30,7 +30,7 @@
 				<view class="line1"></view>
 			</view>
 			<view class="img">
-				<image src="/static/logo200.png" mode="widthFix" show-menu-by-longpress="true"></image>
+				<image src="/static//images/mine/ewm.jpg" mode="widthFix" show-menu-by-longpress="true"></image>
 			</view>
 		</view>
 		

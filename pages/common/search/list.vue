@@ -2,17 +2,21 @@
 	<view class="page">
 		<view class="list">
 			<view class="item" v-for="(item,index) in list">
-				<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+				<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)" v-if="item.imgUrl">
 					<image
-						:src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'"
+						:src="config.staticUrl + item.pdfHash + '/' + item.imgUrl.split(',')[0]"
 						mode="widthFix"></image>
 				</view>
-				<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">{{ item.title }}
+				<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+					{{ item.title }}
+				</view>
+				<view class="title color" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)"
+					v-if="item.summary[0]">{{ item.summary[0].titleZh }}
 				</view>
 				<view class="bottom">
 					<view class="source_box">
 						<!-- <image :src="item.avatar" mode="widthFix" class="avatar"></image> -->
-						<text>{{ item.authors }}</text>
+						<!-- <text>{{ item.authors }}</text> -->
 					</view>
 					<view class="btn_box">
 						<view class="btn" v-if="!item.waitFlag" @click="doRead(index,item.id,true)">加入待阅</view>
@@ -20,6 +24,10 @@
 					</view>
 				</view>
 			</view>
+		</view>
+		
+		<view class="nodata" v-if="list.length == 0">
+			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
 		</view>
 	</view>
 </template>
@@ -75,11 +83,17 @@
 				},
 			}
 		},
+		onLoad(option){
+			var that = this;
+			that.query.keywords = option.keyword || '';
+		},
 		onShow() {
 			var that = this;
 			that.tabIndexStatus = false;
 			that.list = [];
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 			that.getArticles();
 			// that.getSubscribe();
 			// that.getMySubscribe();
@@ -97,7 +111,7 @@
 			getArticles() {
 				var that = this;
 				searchPaper({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					keywords: that.query.keywords,
 					pageNum: that.query.pageNum,
@@ -115,8 +129,8 @@
 				}
 				if(status){
 					addRead({
-						paperId:id,
-						userId: that.user.id || '',
+						paperId:parseInt(id),
+						userId: that.user.id || null,
 						openId: that.user.openId || '',
 					}).then(response => {
 						that.$modal.msg('添加待阅成功');
@@ -124,8 +138,8 @@
 					})
 				}else{
 					cancelRead({
-						paperId:id,
-						userId: that.user.id || '',
+						paperId:parseInt(id),
+						userId: that.user.id || null,
 						openId: that.user.openId || '',
 					}).then(response => {
 						that.$modal.msg('取消待阅成功');
@@ -133,6 +147,9 @@
 					})
 				}
 			},
+			navTo(url) {
+				this.$tab.navigateTo(url)
+			}
 		}
 	}
 </script>
@@ -142,7 +159,7 @@
 		position: relative;
 		column-count: 2;
 		column-gap: 30rpx;
-		padding-top: 150rpx;
+		padding-top: 20rpx;
 	
 		.item {
 			width: 100%;
@@ -161,15 +178,15 @@
 	
 			.title {
 				width: 100%;
-				max-height: 86rpx;
+				// max-height: 86rpx;
 				padding: 10rpx 15rpx;
 				color: #333;
 				word-break: normal;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				-webkit-line-clamp: 2;
-				display: -webkit-box;
-				-webkit-box-orient: vertical
+				// overflow: hidden;
+				// text-overflow: ellipsis;
+				// -webkit-line-clamp: 2;
+				// display: -webkit-box;
+				// -webkit-box-orient: vertical
 			}
 	
 			.bottom {

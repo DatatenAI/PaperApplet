@@ -1,7 +1,11 @@
 // 应用全局配置
 module.exports = {
-	staticUrl: '',
-	baseUrl: 'http://itweiboy.free.idcfengye.com',
+	staticUrl: 'https://chatwithpaper.oss-cn-hongkong.aliyuncs.com/images/',
+	// webViewUrl:'http://template.newjiabo.com/chatpaper',
+	baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
+	// baseUrl: 'https://chatPaper.carmela.tech',
+	webViewUrl:'https://registersysrem.newjiabo.com',
+	// baseUrl: 'http://localhost:3000',//192.168.88.121
 	appId:'wx93f94152c830f126',
 	// 应用信息
 	appInfo: {

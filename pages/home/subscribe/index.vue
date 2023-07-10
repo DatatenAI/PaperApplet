@@ -3,7 +3,7 @@
 		<view class="subscribe_box">
 			<view class="title">我的订阅<text>点击取消订阅</text></view>
 			<view class="tag_box">
-				<uni-tag class="tag_item" :text="item.keywords.searchKeywords" type="primary" size="default" color="#3B00FF"
+				<uni-tag class="tag_item" :text="item.keywords.keywordShort" type="primary" size="default" color="#3B00FF"
 					v-for="item in myKeyWords" @tap="doSubscribe(item.keywords.id,false)" />
 			</view>
 		</view>
@@ -21,7 +21,7 @@
 					@click="getRandomArr(keywordList,5)" style="float: right;"></uni-icons>
 			</view>
 			<view class="tag_box">
-				<uni-tag class="tag_item" :inverted="true" :text="item.searchKeywords" type="primary" size="default" color="#3B00FF"
+				<uni-tag class="tag_item" :inverted="true" :text="item.keywordShort" type="primary" size="default" color="#3B00FF"
 					v-for="item in hotKeywordList" @tap="doSubscribe(item.id,true)" />
 			</view>
 		</view>
@@ -42,7 +42,7 @@
 		cancelSubscribe
 	} from '@/api/home/index.js'
 	import config from '@/config.js';
-	import mSubscribe from '@/components/rf-subscribe/rf-subscribe';
+	import mSubscribe from '@/pages/home/components/rf-subscribe/rf-subscribe';
 	export default {
 		data() {
 			return {
@@ -68,7 +68,9 @@
 		},
 		onShow() {
 			var that = this;
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 			that.getSubscribe();
 			that.getMySubscribe();
 		},
@@ -105,7 +107,7 @@
 				searchKeyWords().then(response => {
 					that.keywordList = response;
 					for(var i = 0;i < that.keywordList.length; i++){
-						that.keywordListTag.push(that.keywordList[i].id+'/'+that.keywordList[i].searchKeywords);
+						that.keywordListTag.push(that.keywordList[i].id+'/'+that.keywordList[i].keywordShort+'/'+that.keywordList[i].searchKeywords);
 					}
 					
 					that.getRandomArr(that.keywordList,5);
@@ -119,7 +121,7 @@
 					return false;
 				}
 				searchMyKeyWords({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 				}).then(response => {
 					that.myKeyWords = response.mykeywords
@@ -132,9 +134,17 @@
 					return false;
 				}
 				if(status){
+					var result = that.myKeyWords.filter(function(item) {
+					  return item.keywordId == id;
+					});
+					if(result.length > 0){
+						that.$modal.msg('已经订阅!');
+						
+						return false;
+					}
 					addSubscribe({
 						keywordId:parseInt(id),
-						userId: that.user.id || '',
+						userId: that.user.id || null,
 						openId: that.user.openId || '',
 					}).then(response => {
 						that.$modal.msg('订阅成功');
@@ -143,7 +153,7 @@
 				}else{
 					cancelSubscribe({
 						keywordId:parseInt(id),
-						userId: that.user.id || '',
+						userId: that.user.id || null,
 						openId: that.user.openId || '',
 					}).then(response => {
 						that.$modal.msg('取消成功')

@@ -6,12 +6,17 @@
 					<view class="title">{{ item.paperInfo.title || ''}}</view>
 					<view class="bottom">
 						<text>{{ item.createTime | formatDate}}</text>
-						<text>{{ item.paperInfo.authors }}</text>
+						<!-- <text>{{ item.paperInfo.authors }}</text> -->
 					</view>
 				</view>
-				<view class="thumb">
-					<image :src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'" mode="aspectFill"></image>
+				<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+					<image
+						:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
+						mode="widthFix"></image>
 				</view>
+				<!-- <view class="thumb">
+					<image :src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'" mode="aspectFill"></image>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -22,8 +27,8 @@
 		getUser,
 		setUser,
 		removeUser,
-	} from '@/utils/auth'
-	
+	} from '@/utils/auth';
+	import config from '@/config'
 	import {
 		searchHistory,
 		statistic,
@@ -62,6 +67,7 @@
 		},
 		data() {
 			return {
+				config:config,
 				query:{
 					favoriteId:0,
 					pageNum: 1,
@@ -74,7 +80,9 @@
 			this.query.favoriteId = parseInt(option.id);
 		},
 		onShow() {
-			this.user = JSON.parse(getUser()) || {};
+			if(getUser()){
+				this.user = JSON.parse(getUser()) || {};
+			}
 			this.list = [];
 			this.getScarchFavoritePaper();
 		},
@@ -101,7 +109,7 @@
 			getScarchFavoritePaper() {
 				var that = this;
 				scarchFavoritePaper({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					favoriteId: that.query.favoriteId || 0,
 					pageNum: that.query.pageNum,

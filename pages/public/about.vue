@@ -3,7 +3,7 @@
     <view class="header-section text-center">
       <image style="width: 150rpx;height: 150rpx;" src="/static/logo200.png" mode="widthFix">
       </image>
-      <uni-title type="h2" title="chatPaper"></uni-title>
+      <uni-title type="h2" title="量拾"></uni-title>
     </view>
 
     <view class="content-section">
@@ -17,13 +17,13 @@
         <view class="list-cell list-cell-arrow">
           <view class="menu-item-box">
             <view>官方邮箱</view>
-            <view class="text-right">bantiangong@91btg.com</view>
+            <view class="text-right">info@chatPaper.org</view>
           </view>
         </view>
         <view class="list-cell list-cell-arrow">
           <view class="menu-item-box">
             <view>服务热线</view>
-            <view class="text-right">400-0480-315</view>
+            <view class="text-right">0551-62889962</view>
           </view>
         </view>
         <view class="list-cell list-cell-arrow">

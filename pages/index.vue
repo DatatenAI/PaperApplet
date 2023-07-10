@@ -6,7 +6,8 @@
 					<uni-icons type="notification" size="24"></uni-icons>
 				</view>
 				<view class="tab_box">
-					<view class="item" :class="{'active':tabIndex == 0}" @click="changeTab(0)" v-if="user.id && user.openId">待阅</view>
+					<view class="item" :class="{'active':tabIndex == 0}" @click="changeTab(0)"
+						v-if="user.id && user.openId">待阅</view>
 					<view class="item" :class="{'active':tabIndex == 1}" @click="changeTab(1)">订阅</view>
 					<!-- <view class="item" :class="{'active':tabIndex == 2}" @click="changeTab(2)">热榜</view> -->
 				</view>
@@ -26,17 +27,21 @@
 		<uni-transition ref="ani" :mode-class="animationSetting[1].modeClass" :show="animationSetting[1].show">
 			<view class="list" v-if="tabIndex == 1">
 				<view class="item" v-for="(item,index) in list">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)" v-if="item.imgUrl">
 						<image
-							:src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'"
+							:src="config.staticUrl + item.pdfHash + '/' + item.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
-					<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">{{ item.title }}
+					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+						{{ item.title }}
+					</view>
+					<view class="title color" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)"
+						v-if="item.summary[0]">{{ item.summary[0].titleZh }}
 					</view>
 					<view class="bottom">
 						<view class="source_box">
 							<!-- <image :src="item.avatar" mode="widthFix" class="avatar"></image> -->
-							<text>{{ item.authors }}</text>
+							<!-- <text>{{ item.authors }}</text> -->
 						</view>
 						<view class="btn_box">
 							<view class="btn" v-if="!item.waitFlag" @click="doRead(index,item.id,true)">加入待阅</view>
@@ -45,27 +50,40 @@
 					</view>
 				</view>
 			</view>
+			
+			<view class="nodata" v-if="list.length == 0">
+				<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+			</view>
 		</uni-transition>
 
 		<uni-transition ref="ani" :mode-class="animationSetting[0].modeClass" :show="animationSetting[0].show">
 			<view class="list_1" v-if="tabIndex == 0">
 				<!-- @touchstart="touchStart" @touchend="touchEnd" -->
-				<view class="item" v-for="(item,index) in tbrList" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
+				<view class="item" v-for="(item,index) in tbrList"
+					@click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
 					<view class="content">
 						<view class="title">{{ item.paperInfo.title || '' }}</view>
 						<view class="bottom">
 							<text>{{ item.createTime | formatDate }}</text>
-							<text>{{ item.paperInfo.authors || ''}}</text>
+							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
 						</view>
 					</view>
-					<view class="thumb">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
 						<image
-							:src="'https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430'"
+							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
 				</view>
+				
+				<view class="nodata" v-if="tbrList.length == 0">
+					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+				</view>
 			</view>
 		</uni-transition>
+		
+		
+		<!-- <xWxmlToCanvas ref="xWxmlToCanvas" :hide="false" :width="350" :height="500" :xStyle="style" :xWxml="wxml">
+		</xWxmlToCanvas> -->
 	</view>
 </template>
 
@@ -83,22 +101,64 @@
 		cancelRead,
 		searchMyRead
 	} from '@/api/home/index.js'
+	import config from '@/config'
 	import fastTab from '@/components/fast-tab/fast-tab';
+	// import xWxmlToCanvas from 'x-wxml-to-canvas/x-wxml-to-canvas'
+	const mode = 'aspectFill';
+	
+	const wxml = `
+			<view class="container">
+				<view><image class="img" src="/static/logon200.png" mode="aspectFill" isMode="true"></image></view>
+				<view class="wrap">
+					<view>
+						<text class="wraptext">窗前明月光，疑是地上霜。举头望明月，低头思故乡</text>
+					</view>
+				</view>
+			</view>
+	`;
+	
+	const style = {
+		container: {
+			width: 350,
+			height: 500,
+			backgroundColor: '#fff',
+			borderRadius: 20,
+			padding: 20,
+		},
+		img: {
+			width: 310,
+			height: 150
+		},
+		wrap: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+		},
+		wraptext: {
+			width: 350,
+			height: 60,
+			fontSize: 13,
+			paddingRight: 10
+		}
+	};
 	export default {
 		components: {
-			fastTab
+			fastTab,
+			// xWxmlToCanvas
 		},
 		data() {
 			return {
-				tabIndexStatus:false,
+				config:config,
+				imgSrc:'/static/logo200.png',
+				wxml: wxml,
+				style: style,
+				imgMode: mode,
+				tabIndexStatus: false,
 				tabData: [],
-				originTabData:[
-					{
-						id:0,
-						keywordShort:"全部",
-						searchKeywords: "全部"
-					}
-				],
+				originTabData: [{
+					id: 0,
+					keywordShort: "全部",
+					searchKeywords: "全部"
+				}],
 				activeIndex: 0,
 				tabIndex: 1,
 				startX: 0,
@@ -125,16 +185,47 @@
 					modeClass: [],
 				}],
 				list: [],
-				tbrList:[],
+				tbrList: [],
 			}
 		},
 		filters: {
+			generateCanvas(txt) {
+				const ctx = uni.createCanvasContext('imgCanvas');
+				ctx.font = 'bold 18rpx serif'
+				ctx.setTextAlign('center')
+				ctx.setFillStyle("#000000")
+				ctx.fillText(txt, this.windowWidth * 0.55 / 2, 60, this.windowWidth * 0.55)
+				ctx.draw(true, () => {
+					setTimeout(function() {
+						uni.canvasToTempFilePath({
+							canvasId: 'imgCanvas',
+							fileType: 'jpg',
+							x: 0,
+							y: 0,
+							width: this.windowWidth * 0.6,
+							height: 100,
+							destWidth: this.windowWidth * 0.6,
+							height: 100,
+							success: function(res) {
+								console.log(res.tempFilePath)
+								// this.imgPath = res.tempFilePath
+								return res.tempFilePath;
+								console.log(this.imgPath)
+								// 在这里保存图片
+							},
+							fail: function(error) {
+								console.log(error)
+							},
+						})
+					}, 100)
+				})
+			},
 			formatDate(time) {
 				if (!time) { //当时间是null或者无效格式时返回空
 					return ' '
 				} else {
 					// String localDate = LocalDateTime.parse(time,DateTimeFormatter.ISO_OFFSET_DATE_TIME).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-					
+
 					// return localDate;
 					return time.substr(0, 19).replace('T', ' ').replace(/-/g, '.');
 					// const timeLen = time.length; //传入的时候时间戳类型应为字符串，因为要根据length判断是10/13的时间戳
@@ -165,21 +256,30 @@
 			that.tabIndexStatus = false;
 			that.list = [];
 			that.tbrList = [];
-			that.queryRead= {
+			that.queryRead = {
 				keywords: '',
 				pageNum: 1,
 				pageSize: 10
 			};
-			that.query={
+			that.query = {
 				keywords: '',
 				pageNum: 1,
 				pageSize: 10
 			};
-			that.user = JSON.parse(getUser()) || {}
+
+			if (getUser()) {
+				that.user = JSON.parse(getUser()) || {}
+				that.getArticlesRead();
+				that.getMySubscribe();
+			}
 			that.getArticles();
 			// that.getSubscribe();
-			that.getArticlesRead();
-			that.getMySubscribe();
+			
+			// that.$refs.xWxmlToCanvas.renderToCanvas();
+			// this.$refs.xWxmlToCanvas.canvasToTempFilePath().then(res => {
+			// 	debugger
+			// 	this.src = res;
+			// });
 		},
 		onReady() {
 
@@ -192,21 +292,21 @@
 			// 	that.noMoreData = true;
 			// 	return false;
 			// }
-			if(this.tabIndex == 0){
+			if (this.tabIndex == 0) {
 				that.queryRead.pageNum++; //页数加一
 				that.getArticlesRead(); //回调接口
 			}
-			if(this.tabIndex == 1){
+			if (this.tabIndex == 1) {
 				that.query.pageNum++; //页数加一
 				that.getArticles(); //回调接口
 			}
-			
+
 		},
 		methods: {
-			getArticlesRead(){
+			getArticlesRead() {
 				var that = this;
 				searchMyRead({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					keywords: that.queryRead.keywords,
 					pageNum: that.queryRead.pageNum,
@@ -218,7 +318,7 @@
 			getArticles() {
 				var that = this;
 				searchPaper({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					keywords: that.query.keywords,
 					pageNum: that.query.pageNum,
@@ -235,29 +335,35 @@
 			},
 			getMySubscribe() {
 				var that = this;
+				that.tabData = [];
+				that.originTabData = [{
+					id: 0,
+					keywordShort: "全部",
+					searchKeywords: "全部"
+				}];
 				searchMyKeyWords({
-					userId: that.user.id || '',
+					userId: that.user.id || null,
 					openId: that.user.openId || '',
 				}).then(response => {
-					if(response.mykeywords.length > 0){
+					if (response.mykeywords.length > 0) {
 						that.tabData = that.originTabData;
-						for(var i=0;i<response.mykeywords.length;i++){
+						for (var i = 0; i < response.mykeywords.length; i++) {
 							that.tabData.push(response.mykeywords[i].keywords);
 						}
 						// that.tabData = that.originTabData.concat(response.mykeywords);
-					}else{
+					} else {
 						that.tabData = that.originTabData.concat(response.defKeyWords);
 					}
-					
+
 					that.tabIndexStatus = true;
 				})
 			},
 			change(key, item) {
-				var  that = this;
-				if(item.searchKeyWords == '全部'){
-					that.query.keywords ='';
-				}else{
-					that.query.keywords =item.searchKeyWords
+				var that = this;
+				if (item.keywordShort == '全部') {
+					that.query.keywords = '';
+				} else {
+					that.query.keywords = item.keywordShort
 				}
 				that.query.pageNum = 1;
 				that.list = [];
@@ -266,27 +372,26 @@
 				// 	content: `当前索${key},当前数据${JSON.stringify(item.searchKeyWords)}`
 				// })
 			},
-			doRead(index,id,status){
-				
+			doRead(index, id, status) {
 				var that = this;
-				if(!that.user.id|| !that.user.openId){
+				if (!that.user.id || !that.user.openId) {
 					that.$modal.msg('请登录');
 					return false;
 				}
-				
-				if(status){
+
+				if (status) {
 					addRead({
-						paperId:id,
-						userId: that.user.id || '',
+						paperId: parseInt(id),
+						userId: that.user.id || null,
 						openId: that.user.openId || '',
 					}).then(response => {
 						that.$modal.msg('添加待阅成功');
 						that.list[index].waitFlag = true;
 					})
-				}else{
+				} else {
 					cancelRead({
-						paperId:id,
-						userId: that.user.id || '',
+						paperId: parseInt(id),
+						userId: that.user.id || null,
 						openId: that.user.openId || '',
 					}).then(response => {
 						that.$modal.msg('取消待阅成功');
@@ -306,6 +411,14 @@
 					this.animationSetting[1].show = false;
 					this.animationSetting[0].modeClass = ['fade', 'slide-left'];
 					this.animationSetting[0].show = true;
+					
+					this.queryRead = {
+						keywords: '',
+						pageNum: 1,
+						pageSize: 10
+					}
+					this.tbrList = [];
+					this.getArticlesRead();
 				}
 
 				if (this.tabIndex == 1) {
@@ -313,6 +426,15 @@
 					this.animationSetting[1].show = true;
 					this.animationSetting[0].modeClass = ['fade', 'slide-left'];
 					this.animationSetting[0].show = false;
+					
+					this.query = {
+						keywords: '',
+						pageNum: 1,
+						pageSize: 10
+					}
+					
+					this.list = [];
+					this.getArticles();
 				}
 			},
 			// change(e) {
@@ -525,15 +647,15 @@
 
 			.title {
 				width: 100%;
-				max-height: 86rpx;
+				// max-height: 86rpx;
 				padding: 10rpx 15rpx;
 				color: #333;
 				word-break: normal;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				-webkit-line-clamp: 2;
-				display: -webkit-box;
-				-webkit-box-orient: vertical
+				// overflow: hidden;
+				// text-overflow: ellipsis;
+				// -webkit-line-clamp: 2;
+				// display: -webkit-box;
+				// -webkit-box-orient: vertical
 			}
 
 			.bottom {
@@ -554,7 +676,7 @@
 					text-overflow: ellipsis;
 					-webkit-line-clamp: 1;
 					display: -webkit-box;
-					white-space:normal;
+					white-space: normal;
 					-webkit-box-orient: vertical;
 
 					.avatar {

@@ -6,7 +6,7 @@
 			</view>
 			<view class="infobox">
 				<!-- <view class="box1 left">
-					<text class="label">来源：</text>
+					<text class="label">作者：</text>
 					<text class="value">{{news.source}}</text>
 				</view> -->
 				<view class="box1 time">
@@ -92,7 +92,9 @@
 		onLoad(options) {
 			var that = this;
 			this.id = options.id
-			that.user = JSON.parse(getUser()) || {}
+			if(getUser()){
+				that.user = JSON.parse(getUser()) || {}
+			}
 			that.getNotice();
 		},
 		created() {},
@@ -100,7 +102,7 @@
 			getNotice(){
 				var that = this;
 				informDetail({
-					// userId: that.user.id || '',
+					// userId: that.user.id || null,
 					// openId: that.user.openId || '',
 					// keywords: that.query.keywords,
 					// pageNum: that.query.pageNum,
