@@ -32,11 +32,6 @@
 			"style": {
 				"navigationBarTitleText": "订阅"
 			}
-		},{
-			"path": "poster/index",
-			"style": {
-				"navigationBarTitleText": "海报模板"
-			}
 		}]
 	}, {
 		//我的

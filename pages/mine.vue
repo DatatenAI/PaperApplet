@@ -187,10 +187,10 @@
 				<view class="item" :class="{'active':subTabIndex2 == 0}" @click="changeSubTab(2,0)">浏览历史</view>
 				<view class="item" :class="{'active':subTabIndex2 == 1}" @click="changeSubTab(2,1)">总结历史</view>
 			</view>
-
+			
 			<view class="list" v-if="tabIndex == 2 && subTabIndex2 == 0">
 				<view class="item" v-for="item in sHistoryList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo && item.paperInfo.imgUrl">
 						<image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
@@ -491,29 +491,29 @@
 			// 	that.getArticles(); //回调接口
 			// }
 
-			if (tabIndex == 0) {
-				if (subTabIndex1 == 1) {
+			if (that.tabIndex == 0) {
+				if (that.subTabIndex1 == 1) {
 					that.articleQuery.pageNum++; //页数加一
 					that.getScarchFavoritePaper();
 				}
 
-				if (subTabIndex2 == 2) {
+				if (that.subTabIndex2 == 2) {
 					// that.getScarchFavorite();
 				}
 			}
 
-			if (tabIndex == 1) {
+			if (that.tabIndex == 1) {
 				that.approveQuery.pageNum++; //页数加一
 				that.getSearchMyLike();
 			}
 
-			if (tabIndex == 2) {
-				if (subTabIndex2 == 1) {
+			if (that.tabIndex == 2) {
+				if (that.subTabIndex2 == 1) {
 					that.sHistoryQuery.pageNum++; //页数加一
 					that.getSearchHistory();
 				}
 
-				if (subTabIndex2 == 2) {
+				if (that.subTabIndex2 == 2) {
 					that.zHistoryQuery.pageNum++; //页数加一
 					that.getSearchSummaryHistory();
 				}
@@ -618,6 +618,7 @@
 					pageSize: that.sHistoryQuery.pageSize,
 				}).then(response => {
 					that.sHistoryList = that.sHistoryList.concat(response);
+					console.log(that.sHistoryList);
 				})
 			},
 			getSearchSummaryHistory() {
@@ -634,10 +635,10 @@
 			},
 			changeSubTab(type, index) {
 				var that = this;
+				this.resetData();
 				if (type == 0) {
 					this.subTabIndex1 = index;
 					
-					this.resetData();
 					this.getStatistic();
 					
 					if(this.subTabIndex1 == 0){
@@ -689,7 +690,7 @@
 						
 						return false;
 					}else{
-						this.searchSummaryHistory();
+						this.getSearchSummaryHistory();
 					}
 					
 					// if(this.subTabIndex2 == 1){
