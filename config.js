@@ -1,6 +1,6 @@
 // 应用全局配置
 module.exports = {
-	staticUrl: 'https://chatwithpaper.oss-cn-hongkong.aliyuncs.com/images/',
+	staticUrl: 'https://chatwithpapers.oss-cn-hongkong.aliyuncs.com/images/',
 	// webViewUrl:'http://template.newjiabo.com/chatpaper',
 	baseUrl: 'https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run',
 	// baseUrl: 'https://chatPaper.carmela.tech',
