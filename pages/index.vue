@@ -59,10 +59,11 @@
 		<uni-transition ref="ani" :mode-class="animationSetting[0].modeClass" :show="animationSetting[0].show">
 			<view class="list_1" v-if="tabIndex == 0">
 				<!-- @touchstart="touchStart" @touchend="touchEnd" -->
-				<view class="item" v-for="(item,index) in tbrList"
-					@click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
+				<view class="item" v-for="(item,index) in tbrList">
 					<view class="content">
-						<view class="title">{{ item.paperInfo.title || '' }}</view>
+						<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
+							{{ item.paperInfo.title || '' }}
+						</view>
 						<view class="bottom">
 							<text>{{ item.createTime | formatDate }}</text>
 							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
@@ -73,7 +74,13 @@
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
+					<view class="bottom">
+						<view class="btn_box">
+							<view class="btn" @click="undoRead(item.paperId)">取消待阅</view>
+						</view>
+					</view>
 				</view>
+				
 				
 				<view class="nodata" v-if="tbrList.length == 0">
 					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
@@ -378,6 +385,7 @@
 					that.$modal.msg('请登录');
 					return false;
 				}
+				console.log(id)
 
 				if (status) {
 					addRead({
@@ -389,6 +397,7 @@
 						that.list[index].waitFlag = true;
 					})
 				} else {
+					console.log(id, that.user.id, that.user.openId)
 					cancelRead({
 						paperId: parseInt(id),
 						userId: that.user.id || null,
@@ -398,6 +407,22 @@
 						that.list[index].waitFlag = false;
 					})
 				}
+			},
+			undoRead(id) {
+				var that = this;
+				if (!that.user.id || !that.user.openId) {
+					that.$modal.msg('请登录');
+					return false;
+				}
+				console.log(id, that.user.id, that.user.openId)
+				cancelRead({
+					paperId: parseInt(id),
+					userId: that.user.id || null,
+					openId: that.user.openId || '',
+				}).then(response => {
+					that.$modal.msg('取消待阅成功');
+					window.location.reload()
+				})
 			},
 			changeTab(index) {
 				if (this.tabIndex == index) {
@@ -767,6 +792,53 @@
 					width: 100%;
 					height: 100%;
 				}
+			}
+			.bottom {
+				padding: 10rpx 15rpx;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				align-content: center;
+			
+				.source_box {
+					width: calc(100% - 130rpx);
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					align-content: center;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					-webkit-line-clamp: 1;
+					display: -webkit-box;
+					white-space: normal;
+					-webkit-box-orient: vertical;
+			
+					.avatar {
+						width: 40rpx;
+						height: 40rpx;
+						border-radius: 50%;
+					}
+			
+					text {
+						font-size: 24rpx;
+						color: #999;
+						margin-left: 10rpx;
+					}
+				}
+			
+				.btn_box {
+					font-size: 24rpx;
+					white-space: nowrap;
+			
+					.btn {
+						background-color: #3B00FF;
+						color: #fff;
+						border-radius: 20rpx;
+						padding: 5rpx 15rpx;
+					}
+				}
+			
 			}
 		}
 	}
