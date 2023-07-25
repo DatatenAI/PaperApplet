@@ -6,7 +6,11 @@ module.exports = {
 	// baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
 	
 	// baseUrl: 'https://chatPaper.carmela.tech',
-	webViewUrl:'https://registersysrem.newjiabo.com',
+	// webViewUrl:'https://registersysrem.newjiabo.com', // 胡师兄的域名
+	// webViewUrl:'https://html2image.oss-cn-hongkong.aliyuncs.com',
+	webViewUrl:'https://html2image.dataten.top', // 阿里云 OSS 域名
+	
+	
 	// baseUrl: 'http://localhost:3000',//192.168.88.121
 	appId:'wx93f94152c830f126',
 	// 应用信息

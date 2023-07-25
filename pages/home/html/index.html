@@ -9,6 +9,9 @@
 		<script src="./js/axios.min.js"></script>
 		<script src="./js/jquery.min.js"></script>
 		<script src="./js/html2canvas.min.js"></script>
+		<script>
+			var baseUrl='https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run';
+		</script>
 		<link href="./styles/style.css" rel="stylesheet" />
 		<title>海报生成</title>
 	</head>
@@ -239,7 +242,7 @@
 					axios({
 						method: "get",
 						// url: "https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run/api/trpc/weapp.getQrcode",
-						url: "/api/trpc/weapp.getQrcode?" + this.parseParams(reqBody),
+						url: baseUrl + "/api/trpc/weapp.getQrcode?" + this.parseParams(reqBody),
 						dataType: 'json'
 					}).then(function(res) {
 						that.paparInfo = res.data[0].result.data.json;
