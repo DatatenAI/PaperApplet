@@ -3,6 +3,8 @@ module.exports = {
 	staticUrl: 'https://chatwithpapers.oss-cn-hongkong.aliyuncs.com/images/',
 	// webViewUrl:'http://template.newjiabo.com/chatpaper',
 	baseUrl: 'https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run',
+	// baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
+	
 	// baseUrl: 'https://chatPaper.carmela.tech',
 	webViewUrl:'https://registersysrem.newjiabo.com',
 	// baseUrl: 'http://localhost:3000',//192.168.88.121
