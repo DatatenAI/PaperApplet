@@ -641,13 +641,16 @@
 					
 					this.getStatistic();
 					
-					if(this.subTabIndex1 == 0){
-						this.getScarchFavoritePaper();
-					}
+					this.getScarchFavoritePaper();
+					this.getScarchFavorite();
 					
-					if(this.subTabIndex1 == 1){
-						this.getScarchFavorite();
-					}
+					// if(this.subTabIndex1 == 0){
+					// 	this.getScarchFavoritePaper();
+					// }
+					
+					// if(this.subTabIndex1 == 1){
+					// 	this.getScarchFavorite();
+					// }
 					
 					// if(this.subTabIndex1 == 1){
 					// 	this.articleList = [];
