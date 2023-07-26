@@ -76,7 +76,8 @@
 					</view>
 					<view class="bottom">
 						<view class="btn_box">
-							<view class="btn" @click="undoRead(item.paperId)">取消待阅</view>
+							<view class="btn" v-if="!(tbrCancelList[index])" @click="undoRead(index, item.paperId, true)">取消待阅</view>
+							<view class="join-btn" v-else @click="undoRead(index, item.paperId, false)">已取消</view>
 						</view>
 					</view>
 				</view>
@@ -193,6 +194,7 @@
 				}],
 				list: [],
 				tbrList: [],
+				tbrCancelList: [],
 			}
 		},
 		filters: {
@@ -263,6 +265,7 @@
 			that.tabIndexStatus = false;
 			that.list = [];
 			that.tbrList = [];
+			that.tbrCancelList = []
 			that.queryRead = {
 				keywords: '',
 				pageNum: 1,
@@ -320,6 +323,8 @@
 					pageSize: that.queryRead.pageSize,
 				}).then(response => {
 					that.tbrList = that.tbrList.concat(response);
+					const responseCancelList = Array.from({length: response.length}, () => false);
+					that.tbrCancelList = that.tbrCancelList.concat(responseCancelList)
 				})
 			},
 			getArticles() {
@@ -385,7 +390,6 @@
 					that.$modal.msg('请登录');
 					return false;
 				}
-				console.log(id)
 
 				if (status) {
 					addRead({
@@ -397,7 +401,6 @@
 						that.list[index].waitFlag = true;
 					})
 				} else {
-					console.log(id, that.user.id, that.user.openId)
 					cancelRead({
 						paperId: parseInt(id),
 						userId: that.user.id || null,
@@ -408,21 +411,33 @@
 					})
 				}
 			},
-			undoRead(id) {
+			undoRead(index, id, status) {
 				var that = this;
 				if (!that.user.id || !that.user.openId) {
 					that.$modal.msg('请登录');
 					return false;
 				}
-				console.log(id, that.user.id, that.user.openId)
-				cancelRead({
-					paperId: parseInt(id),
-					userId: that.user.id || null,
-					openId: that.user.openId || '',
-				}).then(response => {
-					that.$modal.msg('取消待阅成功');
-					window.location.reload()
-				})
+				
+				if (status) {
+					cancelRead({
+						paperId: parseInt(id),
+						userId: that.user.id || null,
+						openId: that.user.openId || '',
+					}).then(response => {
+						that.$modal.msg('取消待阅成功');
+						that.$set(that.tbrCancelList, index, true);
+					})
+				} else {
+					addRead({
+						paperId: parseInt(id),
+						userId: that.user.id || null,
+						openId: that.user.openId || '',
+					}).then(response => {
+						that.$modal.msg('添加待阅成功');
+						that.$set(that.tbrCancelList, index, false);
+					})
+				}
+				
 			},
 			changeTab(index) {
 				if (this.tabIndex == index) {
@@ -443,6 +458,7 @@
 						pageSize: 10
 					}
 					this.tbrList = [];
+					this.tbrCancelList = [];
 					this.getArticlesRead();
 				}
 
@@ -834,6 +850,13 @@
 					.btn {
 						background-color: #3B00FF;
 						color: #fff;
+						border-radius: 20rpx;
+						padding: 5rpx 15rpx;
+					}
+					
+					.join-btn {
+						color: #3B00FF;
+						border: 1px solid #3B00FF;
 						border-radius: 20rpx;
 						padding: 5rpx 15rpx;
 					}
