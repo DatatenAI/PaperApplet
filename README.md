@@ -11,7 +11,5 @@
 ## 问题解决
 如果上述运行步骤出现问题（比如HBuilder X或微信开发者工具的console中有报错），可能可以通过以下方法进行解决：
 1. 检查微信开发者工具服务端口（菜单栏“设置” -> “安全” -> “服务端口”）是否开启。
-2. 检查manifest中的“微信小程序配置” -> “微信小程序AppID”是否与微信开发者工具中登录的帐号的AppID（可以在[这里](https://developers.weixin.qq.com/sandbox?tab=miniprogram&hl=zh)查看，链接打不开的话多刷新几遍，或者粘贴到浏览器中运行）一致。
-3. 检查config.js中配置是否正确，尤其是AppID是否与第2条中一致，baseUrl是否正确（如果是本地测试，需要与本地后端运行的端口一致，一般为`http://localhost:3000`）。
-4. 此外[后端仓库](https://github.com/DatatenAI/ChatPaperAPI)中的.env文件中的WX_APPID和WX_SECRETKEY需要与微信开发者工具的登录帐号的（查看方法同第2条）一致。
-5. 本仓库config.js和[后端仓库](https://github.com/DatatenAI/ChatPaperAPI).env中的其它配置（比如数据库链接、OSS链接等）也需要根据开发需求进行调整（比如连接哪一个测试数据库）。
+2. 检查config.js中配置是否正确，尤其是baseUrl是否正确（如果是本地测试，需要与本地后端运行的端口一致，一般为`http://localhost:3000`）。
+3. 本仓库config.js和[后端仓库](https://github.com/DatatenAI/ChatPaperAPI).env中的其它配置（比如数据库链接、OSS链接等）也需要根据开发需求进行调整（比如连接哪一个测试数据库）。
