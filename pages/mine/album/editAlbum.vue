@@ -63,8 +63,8 @@
 				editFavorite({
 					userId: that.user.id || null,
 					openId: that.user.openId || '',
+					favoriteName: that.form.favoriteName,
 					favoriteId: that.query.favoriteId || 0,
-				
 				}).then(
 				response => {
 					console.log("response from edit",response);

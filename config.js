@@ -6,7 +6,7 @@ module.exports = {
 	// baseUrl: 'https://chatPaper.carmela.tech',
 	webViewUrl:'https://registersysrem.newjiabo.com',
 	baseUrl: 'http://localhost:3000',//192.168.88.121
-	appId:'wx3528768856aa1356',
+	appId:'wx93f94152c830f126',
 	// 应用信息
 	appInfo: {
 		// 应用名称

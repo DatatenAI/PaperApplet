@@ -144,7 +144,7 @@
 							</view>
 							<view class="uni-list album">
 								<uni-list-item :showArrow="true" showExtraIcon="true" :extraIcon="{type: 'folder-add-filled'}"
-									title="edit新专辑" clickable @click="navTo(`/pages/mine/album/editAlbum`)" />
+									title="edit新专辑" clickable @click="navTo(`/pages/mine/album/editAlbum?id=${item.id}`)" />
 							</view>
 							<view class="uni-list album"><button open-type="getAlbumInfo" clickable @click="navTo(`/pages/mine/album/editAlbum?id=${item.id}`)">edit album name</button></view>
 							<view class="btn"><button open-type="deleteAlbum" @click="deleteAlbum">delete album</button></view>
