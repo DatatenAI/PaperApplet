@@ -2,11 +2,11 @@
 module.exports = {
 	staticUrl: 'https://chatwithpaper.oss-cn-hongkong.aliyuncs.com/images/',
 	// webViewUrl:'http://template.newjiabo.com/chatpaper',
-	baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
+	//baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
 	// baseUrl: 'https://chatPaper.carmela.tech',
 	webViewUrl:'https://registersysrem.newjiabo.com',
-	// baseUrl: 'http://localhost:3000',//192.168.88.121
-	appId:'wx93f94152c830f126',
+	baseUrl: 'http://localhost:3000',//192.168.88.121
+	appId:'wx3528768856aa1356',
 	// 应用信息
 	appInfo: {
 		// 应用名称

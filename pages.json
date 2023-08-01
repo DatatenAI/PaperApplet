@@ -92,7 +92,7 @@
 				"navigationBarTitleText": "创建专辑"
 			}
 		}, {
-			"path": "album/edit",
+			"path": "album/editAlbum",
 			"style": {
 				"navigationBarTitleText": "编辑专辑"
 			}
@@ -106,7 +106,16 @@
 			"style": {
 				"navigationBarTitleText": "绑定邮箱"
 			}
-		}]
+		}    ,{
+                    "path" : "editAlbum/editAlbum",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 	}, {
 		//公开的部分
 		"root": "pages/public",

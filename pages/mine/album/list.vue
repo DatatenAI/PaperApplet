@@ -108,6 +108,7 @@
 		methods: {
 			getScarchFavoritePaper() {
 				var that = this;
+				console.log("------id-----",that.user.openId,that.query.favoriteId)
 				scarchFavoritePaper({
 					userId: that.user.id || null,
 					openId: that.user.openId || '',

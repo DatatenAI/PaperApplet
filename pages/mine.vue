@@ -137,10 +137,17 @@
 									
 								</view>
 								<view class="bot b-t">
-									<text>查看更多</text>
+									<text>查看更多zhuanji</text>
 									<uni-icons type="forward" size="18" color="#666"></uni-icons>
 								</view>
+								
 							</view>
+							<view class="uni-list album">
+								<uni-list-item :showArrow="true" showExtraIcon="true" :extraIcon="{type: 'folder-add-filled'}"
+									title="edit新专辑" clickable @click="navTo(`/pages/mine/album/editAlbum`)" />
+							</view>
+							<view class="uni-list album"><button open-type="getAlbumInfo" clickable @click="navTo(`/pages/mine/album/editAlbum?id=${item.id}`)">edit album name</button></view>
+							<view class="btn"><button open-type="deleteAlbum" @click="deleteAlbum">delete album</button></view>
 						</view>
 					</view>
 				</view>
@@ -528,6 +535,12 @@
 			}
 		},
 		methods: {
+			editAlbumName(iid){
+				console.log("----edit name----",iid);
+			},
+			deleteAlbum(e){
+				console.log("------delete name----");
+			},
 			resetData(){
 				this.sHistoryQuery = {
 					pageNum: 1,
