@@ -1,5 +1,5 @@
 <template>
-	<view class="page">
+	<view class="page" :style="{backgroundImage: 'url('+config.bgUrl+')'}">
 		<!-- 状态栏占位 -->
 		<view class="statusBar" :style="{ paddingTop: statusBarHeight + 'px' }"></view>
 
@@ -14,7 +14,7 @@
 			</view>
 			<view class="login_box" @click="navTo('/pages/login')">
 				<text>请登录/注册</text>
-				<text>ID:xxxxxx</text>
+				<!-- <text>ID:xxxxxx</text> -->
 			</view>
 		</view>
 
@@ -28,11 +28,11 @@
 
 			<view class="login_box" @click="navTo(`/pages/mine/info/index`)">
 				<text>{{user.nickName}}</text>
-				<text>ID:{{user.id}}</text>
+				<!-- <text>ID:{{user.id}}</text> -->
 			</view>
 		</view>
 
-		<view class="per_box" @click="navTo(`/pages/mine/info/edit`)" v-if="user.openId">
+		<view class="per_box" @click="navTo(`/pages/mine/info/intro`)" v-if="user.openId">
 			{{ user.intro || "请填写自定义介绍"}}
 		</view>
 
@@ -99,7 +99,8 @@
 							<!-- <text>{{ item.paperInfo.authors }}</text> -->
 						</view>
 					</view>
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)"
+						v-if="item.paperInfo.imgUrl">
 						<image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
@@ -126,15 +127,16 @@
 								<view class="image_list">
 									<view class="image_item" v-for="subItem in item.favoriteDetails.slice(0,4)">
 										<!-- <image
-											src="https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430"
-											mode="widthFix"></image> -->
-										<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${subItem.paperInfo.id}`)" v-if="subItem.paperInfo.imgUrl">
-											<image
-												:src="config.staticUrl + subItem.paperInfo.imgUrl.split(',')[0]"
+													src="https://img2.baidu.com/it/u=435937141,731061479&fm=253&fmt=auto&app=138&f=JPEG?w=640&h=430"
+													mode="widthFix"></image> -->
+										<view class="thumb"
+											@click="navTo(`/pages/home/detail/detail?id=${subItem.paperInfo.id}`)"
+											v-if="subItem.paperInfo.imgUrl">
+											<image :src="config.staticUrl + subItem.paperInfo.imgUrl.split(',')[0]"
 												mode="widthFix"></image>
 										</view>
 									</view>
-									
+
 								</view>
 								<view class="bot b-t">
 									<text>查看更多</text>
@@ -153,14 +155,15 @@
 
 			<view class="list" v-if="tabIndex == 1">
 				<view class="item" v-for="item in approveList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)"
+						v-if="item.paperInfo.imgUrl">
 						<image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
 					<!-- <view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-						{{ item.paperInfo.title || '' }}
-					</view> -->
+								{{ item.paperInfo.title || '' }}
+							</view> -->
 					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
 						{{ item.paperInfo.title }}
 					</view>
@@ -174,30 +177,29 @@
 						</view>
 						<view class="btn_box">
 							<!-- <view class="btn" v-if="item.isJoin">加入待阅</view>
-						<view class="join-btn" v-else>已加入</view> -->
+								<view class="join-btn" v-else>已加入</view> -->
 							<!-- <uni-icons type="hand-up" size="14"></uni-icons> 123 -->
 						</view>
 					</view>
 				</view>
-
-
 			</view>
 
 			<view class="subTab_box" v-if="tabIndex == 2">
 				<view class="item" :class="{'active':subTabIndex2 == 0}" @click="changeSubTab(2,0)">浏览历史</view>
 				<view class="item" :class="{'active':subTabIndex2 == 1}" @click="changeSubTab(2,1)">总结历史</view>
 			</view>
-			
+
 			<view class="list" v-if="tabIndex == 2 && subTabIndex2 == 0">
 				<view class="item" v-for="item in sHistoryList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo && item.paperInfo.imgUrl">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)"
+						v-if="item.paperInfo && item.paperInfo.imgUrl">
 						<image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
 					<!-- <view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-						{{ item.paperInfo.title }}
-					</view> -->
+								{{ item.paperInfo.title }}
+							</view> -->
 					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
 						{{ item.paperInfo.title }}
 					</view>
@@ -211,7 +213,7 @@
 						</view>
 						<view class="btn_box">
 							<!-- <view class="btn" v-if="item.isJoin">加入待阅</view>
-						<view class="join-btn" v-else>已加入</view> -->
+								<view class="join-btn" v-else>已加入</view> -->
 							<!-- <uni-icons type="hand-up" size="14"></uni-icons> 123 -->
 						</view>
 					</view>
@@ -221,14 +223,15 @@
 
 			<view class="list" v-if="tabIndex == 2 && subTabIndex2 == 1">
 				<view class="item" v-for="item in zHistoryList">
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)"
+						v-if="item.paperInfo.imgUrl">
 						<image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
 					<!-- <view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-						{{ item.paperInfo.title }}
-					</view> -->
+								{{ item.paperInfo.title }}
+							</view> -->
 					<view class="title bolder" @click="navTo(`/pages/home/detail/detail?id=${item.id}`)">
 						{{ item.paperInfo.title }}
 					</view>
@@ -242,7 +245,7 @@
 						</view>
 						<view class="btn_box">
 							<!-- <view class="btn" v-if="item.isJoin">加入待阅</view>
-						<view class="join-btn" v-else>已加入</view> -->
+								<view class="join-btn" v-else>已加入</view> -->
 							<!-- <uni-icons type="hand-up" size="14"></uni-icons> 123 -->
 						</view>
 					</view>
@@ -374,7 +377,7 @@
 		},
 		data() {
 			return {
-				config:config,
+				config: config,
 				tabIndex: 1,
 				subTabIndex1: 1,
 				subTabIndex2: 0,
@@ -528,30 +531,30 @@
 			}
 		},
 		methods: {
-			resetData(){
+			resetData() {
 				this.sHistoryQuery = {
 					pageNum: 1,
 					pageSize: 10
 				};
 				this.sHistoryList = [];
-				this.zHistoryQuery =  {
+				this.zHistoryQuery = {
 					pageNum: 1,
 					pageSize: 10
 				};
 				this.zHistoryList = [],
-				this.approveList =  [],
-				this.approveQuery =  {
-					pageNum: 1,
-					pageSize: 10
-				};
-				this.articleList =  [];
-				this.articleQuery =  {
+					this.approveList = [],
+					this.approveQuery = {
+						pageNum: 1,
+						pageSize: 10
+					};
+				this.articleList = [];
+				this.articleQuery = {
 					favoriteId: '',
 					pageNum: 1,
 					pageSize: 10,
 				};
-				this.albumList =  [];
-				this.albumQuery =  {
+				this.albumList = [];
+				this.albumQuery = {
 					pageNum: 1,
 					pageSize: 10
 				};
@@ -638,20 +641,17 @@
 				this.resetData();
 				if (type == 0) {
 					this.subTabIndex1 = index;
-					
+
 					this.getStatistic();
-					
-					this.getScarchFavoritePaper();
-					this.getScarchFavorite();
-					
-					// if(this.subTabIndex1 == 0){
-					// 	this.getScarchFavoritePaper();
-					// }
-					
-					// if(this.subTabIndex1 == 1){
-					// 	this.getScarchFavorite();
-					// }
-					
+
+					if (this.subTabIndex1 == 0) {
+						this.getScarchFavoritePaper();
+					}
+
+					if (this.subTabIndex1 == 1) {
+						this.getScarchFavorite();
+					}
+
 					// if(this.subTabIndex1 == 1){
 					// 	this.articleList = [];
 					// 	this.articleQuery = {
@@ -673,29 +673,29 @@
 
 				if (type == 2) {
 					this.subTabIndex2 = index;
-					
-					if(this.subTabIndex2 == 0){
+
+					if (this.subTabIndex2 == 0) {
 						this.getSearchHistory();
 					}
-					
-					if (index == 1 && ! this.user.email) {
+
+					if (index == 1 && !this.user.email) {
 						uni.showModal({
 							title: '提示',
 							content: "请进行邮箱绑定！",
 							cancelText: '取消',
 							confirmText: '确定',
 							success: function(res) {
-								if(res.confirm){
+								if (res.confirm) {
 									that.navTo('/pages/mine/info/bindEmail');
 								}
 							}
 						})
-						
+
 						return false;
-					}else{
+					} else {
 						this.getSearchSummaryHistory();
 					}
-					
+
 					// if(this.subTabIndex2 == 1){
 					// 	this.sHistoryList = [];
 					// 	this.sHistoryQuery = {
@@ -724,16 +724,16 @@
 				this.tabIndex = index;
 				this.resetData();
 				this.getStatistic();
-				
-				if(this.tabIndex == 0){
+
+				if (this.tabIndex == 0) {
 					this.getScarchFavorite();
 				}
-				
-				if(this.tabIndex == 1){
+
+				if (this.tabIndex == 1) {
 					this.getSearchMyLike();
 				}
-				
-				if(this.tabIndex == 2){
+
+				if (this.tabIndex == 2) {
 					this.getSearchHistory();
 				}
 				// if(this.tabIndex == 0){
@@ -879,7 +879,7 @@
 
 <style lang="scss">
 	.page {
-		background-image: url("https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/mine-chatpaper-bg.png");
+		// background-image: url("https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/mine-chatpaper-bg.png");
 		background-repeat: no-repeat;
 		background-size: 100% auto;
 	}
@@ -1018,9 +1018,9 @@
 			margin-left: 20rpx;
 			font-size: 28rpx;
 
-			text:first-child {
-				margin-bottom: 20rpx;
-			}
+			// text:first-child {
+			// 	margin-bottom: 20rpx;
+			// }
 
 		}
 

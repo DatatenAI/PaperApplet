@@ -1,5 +1,6 @@
 const TokenKey = 'App-Token'
 const UserKey = 'App-User'
+const WeixinKey = 'App-Weixin'
 export function getToken() {
   return uni.getStorageSync(TokenKey)
 }
@@ -22,4 +23,17 @@ export function setUser(user) {
 
 export function removeUser() {
   return uni.removeStorageSync(UserKey)
+}
+
+
+export function getWeixin() {
+  return uni.getStorageSync(WeixinKey)
+}
+
+export function setWeixin(weixin) {
+  return uni.setStorageSync(WeixinKey, weixin)
+}
+
+export function removeWeixin() {
+  return uni.removeStorageSync(WeixinKey)
 }

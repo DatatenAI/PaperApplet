@@ -39,6 +39,9 @@
 						v-if="item.summary[0]">{{ item.summary[0].titleZh }}
 					</view>
 					<view class="bottom">
+						<text style="color:#999">{{ item.createTime | formatDate }}</text>
+					</view>
+					<view class="bottom">
 						<view class="source_box">
 							<!-- <image :src="item.avatar" mode="widthFix" class="avatar"></image> -->
 							<!-- <text>{{ item.authors }}</text> -->
@@ -59,11 +62,10 @@
 		<uni-transition ref="ani" :mode-class="animationSetting[0].modeClass" :show="animationSetting[0].show">
 			<view class="list_1" v-if="tabIndex == 0">
 				<!-- @touchstart="touchStart" @touchend="touchEnd" -->
-				<view class="item" v-for="(item,index) in tbrList">
+				<view class="item" v-for="(item,index) in tbrList"
+					@click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
 					<view class="content">
-						<view class="title" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)">
-							{{ item.paperInfo.title || '' }}
-						</view>
+						<view class="title">{{ item.paperInfo.title || '' }}</view>
 						<view class="bottom">
 							<text>{{ item.createTime | formatDate }}</text>
 							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
@@ -74,14 +76,7 @@
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
 					</view>
-					<view class="bottom">
-						<view class="btn_box">
-							<view class="btn" v-if="!(tbrCancelList[index])" @click="undoRead(index, item.paperId, true)">取消待阅</view>
-							<view class="join-btn" v-else @click="undoRead(index, item.paperId, false)">已取消</view>
-						</view>
-					</view>
 				</view>
-				
 				
 				<view class="nodata" v-if="tbrList.length == 0">
 					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
@@ -194,7 +189,6 @@
 				}],
 				list: [],
 				tbrList: [],
-				tbrCancelList: [],
 			}
 		},
 		filters: {
@@ -236,7 +230,8 @@
 					// String localDate = LocalDateTime.parse(time,DateTimeFormatter.ISO_OFFSET_DATE_TIME).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
 					// return localDate;
-					return time.substr(0, 19).replace('T', ' ').replace(/-/g, '.');
+					return time.substr(0, 10);
+					// return time.substr(0, 19).replace('T', ' ').replace(/-/g, '.');
 					// const timeLen = time.length; //传入的时候时间戳类型应为字符串，因为要根据length判断是10/13的时间戳
 					// const oneDate = new Date(parseInt(time) * 1000); // 10位时间戳
 					// const twoDate = new Date(parseInt(time)); // 13位时间戳
@@ -265,7 +260,6 @@
 			that.tabIndexStatus = false;
 			that.list = [];
 			that.tbrList = [];
-			that.tbrCancelList = []
 			that.queryRead = {
 				keywords: '',
 				pageNum: 1,
@@ -323,8 +317,6 @@
 					pageSize: that.queryRead.pageSize,
 				}).then(response => {
 					that.tbrList = that.tbrList.concat(response);
-					const responseCancelList = Array.from({length: response.length}, () => false);
-					that.tbrCancelList = that.tbrCancelList.concat(responseCancelList)
 				})
 			},
 			getArticles() {
@@ -411,34 +403,6 @@
 					})
 				}
 			},
-			undoRead(index, id, status) {
-				var that = this;
-				if (!that.user.id || !that.user.openId) {
-					that.$modal.msg('请登录');
-					return false;
-				}
-				
-				if (status) {
-					cancelRead({
-						paperId: parseInt(id),
-						userId: that.user.id || null,
-						openId: that.user.openId || '',
-					}).then(response => {
-						that.$modal.msg('取消待阅成功');
-						that.$set(that.tbrCancelList, index, true);
-					})
-				} else {
-					addRead({
-						paperId: parseInt(id),
-						userId: that.user.id || null,
-						openId: that.user.openId || '',
-					}).then(response => {
-						that.$modal.msg('添加待阅成功');
-						that.$set(that.tbrCancelList, index, false);
-					})
-				}
-				
-			},
 			changeTab(index) {
 				if (this.tabIndex == index) {
 					return false;
@@ -458,7 +422,6 @@
 						pageSize: 10
 					}
 					this.tbrList = [];
-					this.tbrCancelList = [];
 					this.getArticlesRead();
 				}
 
@@ -808,60 +771,6 @@
 					width: 100%;
 					height: 100%;
 				}
-			}
-			.bottom {
-				padding: 10rpx 15rpx;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				align-content: center;
-			
-				.source_box {
-					width: calc(100% - 130rpx);
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					align-content: center;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					-webkit-line-clamp: 1;
-					display: -webkit-box;
-					white-space: normal;
-					-webkit-box-orient: vertical;
-			
-					.avatar {
-						width: 40rpx;
-						height: 40rpx;
-						border-radius: 50%;
-					}
-			
-					text {
-						font-size: 24rpx;
-						color: #999;
-						margin-left: 10rpx;
-					}
-				}
-			
-				.btn_box {
-					font-size: 24rpx;
-					white-space: nowrap;
-			
-					.btn {
-						background-color: #3B00FF;
-						color: #fff;
-						border-radius: 20rpx;
-						padding: 5rpx 15rpx;
-					}
-					
-					.join-btn {
-						color: #3B00FF;
-						border: 1px solid #3B00FF;
-						border-radius: 20rpx;
-						padding: 5rpx 15rpx;
-					}
-				}
-			
 			}
 		}
 	}

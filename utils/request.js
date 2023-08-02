@@ -14,7 +14,7 @@ import {
 } from '@/utils/common'
 import qs from 'qs'
 
-let timeout = 320000
+let timeout = 600000
 const baseUrl = config.baseUrl
 
 const request = config => {

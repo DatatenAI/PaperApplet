@@ -18,6 +18,15 @@ export function paperDetail(query) {
   })
 }
 
+// 查询文章 详情
+export function paperEvaluate(query) {
+  return request({
+    url: '/api/trpc/wepaper.paperDetail',
+    method: 'get',
+    data: query
+  })
+}
+
 // 查询文章 待阅
 export function searchMyRead(query) {
   return request({

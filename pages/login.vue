@@ -30,8 +30,10 @@
 	} from '@/api/system/index.js'
 	import {
 		setUser,
-		setToken
+		setToken,
+		getWeixin
 	} from '@/utils/auth.js'
+	
 	var WXBizDataCrypt = require('@/utils/WXBizDataCrypt');
 
 	export default {
@@ -63,7 +65,18 @@
 		},
 		onLoad() {
 			var that = this;
-			that.getWeixinCode();
+			// that.getWeixinCode();
+			var jsonData = JSON.parse(getWeixin()) || {};
+			
+			if(jsonData){
+				if(jsonData.isExit){
+					that.weixin = jsonData.wxuser;
+				}
+				that.weixin.token = jsonData.token;
+				that.weixin.openId = jsonData.opendId;
+				// that.weixin.session_key = jsonData.session_key;
+			}
+			
 			// setTimeout(function() {
 			// 	that.getWeixinOpenid();
 			// }, 1500)
@@ -145,41 +158,70 @@
 				wx.getUserProfile({
 					desc: '获取您的微信个人信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
 					success: (res) => {
-						var pc = new WXBizDataCrypt(config.appId, that.weixin.session_key)
-						var data = pc.decryptData(res.encryptedData, res.iv)
-						console.log(data);
-						that.weixin.nickName = data.nickName;
-						that.weixin.avatar = data.avatarUrl;
-						that.weixin.country = data.country;
-						that.weixin.city = data.city;
-						that.weixin.gender = data.gender;
-						that.weixin.province = data.province;
+						// var pc = new WXBizDataCrypt(config.appId, that.weixin.session_key)
+						// var data = pc.decryptData(res.encryptedData, res.iv)
+						// console.log(data);
+						// that.weixin.nickName = data.nickName;
+						// that.weixin.avatar = data.avatarUrl;
+						// that.weixin.country = data.country;
+						// that.weixin.city = data.city;
+						// that.weixin.gender = data.gender;
+						// that.weixin.province = data.province;
 						that.saveWeixinInfo();
 					}
 				})
 			},
 			saveWeixinInfo() {
 				var that = this;
-				insertWxUser({
-					avatar: that.weixin.avatar,
-					city: that.weixin.city,
-					country: that.weixin.country,
-					gender: that.sex[that.weixin.gender],
-					nickName: that.weixin.nickName,
-					openId: that.weixin.openId,
-					province: that.weixin.province,
-					unionId: that.weixin.unionId,
-					phone: '',
-					email: '',
-					birthday: '',
-					educational: '',
-					interest: '',
-				}).then(response => {
-					response.id = parseInt(response.id);
-					response.token = that.weixin.token;
-					setUser(JSON.stringify(response));
+				var jsonData = JSON.parse(getWeixin()) || {};
+				
+				if(jsonData.isExit){
+					jsonData.wxuser.id = parseInt(jsonData.wxuser.id);
+					jsonData.wxuser.token = jsonData.token;
+					setUser(JSON.stringify(jsonData.wxuser));
 					that.navSwitchPage('/pages/mine');
-				})
+				}else{
+					insertWxUser({
+						avatar: '',
+						city: '',
+						country: '',
+						gender: '未知',
+						nickName: '微信用户' + (new Date()).valueOf(),
+						openId: jsonData.openId,
+						province: '',
+						unionId: '',
+						phone: '',
+						email: '',
+						birthday: '',
+						educational: '',
+						interest: '',
+					}).then(res => {
+						res.id = parseInt(res.id);
+						res.token = jsonData.token;
+						setUser(JSON.stringify(res));
+						that.navSwitchPage('/pages/mine');
+					})
+				}
+				// insertWxUser({
+				// 	avatar: that.weixin.avatar,
+				// 	city: that.weixin.city,
+				// 	country: that.weixin.country,
+				// 	gender: that.sex[that.weixin.gender],
+				// 	nickName: that.weixin.nickName,
+				// 	openId: that.weixin.openId,
+				// 	province: that.weixin.province,
+				// 	unionId: that.weixin.unionId,
+				// 	phone: '',
+				// 	email: '',
+				// 	birthday: '',
+				// 	educational: '',
+				// 	interest: '',
+				// }).then(response => {
+				// 	response.id = parseInt(response.id);
+				// 	response.token = that.weixin.token;
+				// 	setUser(JSON.stringify(response));
+				// 	that.navSwitchPage('/pages/mine');
+				// })
 			},
 			//下一页
 			navToPage(url) {

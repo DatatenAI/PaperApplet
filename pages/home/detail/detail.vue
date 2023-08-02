@@ -32,7 +32,10 @@
 				<view class="infobox">
 					<view class="box1 left">
 						<text class="label">作者：</text>
-						<text class="value">{{data.authors}}</text>
+						<view class="value">
+							<uni-tag :text="item" type="primary" size="mini" v-for="(item,index) in data.authors" class="author-tag"/>
+							<!-- {{data.authors}} -->
+						</view>
 					</view>
 					<view class="box1 time">
 						<text class="label">时间：{{data.createTime | formatDate}}</text>
@@ -56,6 +59,19 @@
 					<image :src="'https://chatwithpaper.oss-cn-hongkong.aliyuncs.com/weixin/pdf-icon.png'"
 						mode="widthFix"></image>
 					<text>{{data.summary[0].titleZh || ''}}.pdf</text>
+				</view>
+				
+				<view class="example">
+					<!-- <uni-forms ref="form">
+						<uni-forms-item name="content">
+							<uni-easyinput type="textarea" v-model="evaluate.content" placeholder="请对上面的LLM总结结果进行评价" clearable style="text-align: center;"/>
+						</uni-forms-item>
+					</uni-forms> -->
+					<view class="tips">请对上面的LLM总结结果进行评价</view>
+					<view class="button-group">
+						<button type="primary" size="mini" @click="evaluate('good')" class="goodBtn"><uni-icons type="hand-up-filled" size="16" color="#fff"></uni-icons>好</button>
+						<button type="primary" size="mini" @click="evaluate('bad')" class="badBtn"><uni-icons type="hand-down-filled" size="16" color="#fff"></uni-icons>坏</button>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -166,7 +182,8 @@
 		cancelLike,
 		addFavoritePaper,
 		scarchFavorite,
-		cancelFavorite
+		cancelFavorite,
+		paperEvaluate
 	} from '@/api/home/index.js'
 
 	import config from '@/config.js';
@@ -485,6 +502,7 @@
 					paperId: parseInt(that.id),
 				}).then(response => {
 					that.data = response;
+					that.data.authors=JSON.parse(that.data.authors);
 					var imgUrl = [];
 					if(response.imgUrl){
 						imgUrl = response.imgUrl.split(',');
@@ -510,6 +528,22 @@
 					that.news = response.data;
 				})
 			},
+			evaluate(str){
+				var that = this;
+				if(str=='good'){
+					paperEvaluate({
+						id: this.id
+					}).then(response => {
+						that.$modal.msg('评价成功！');
+					})
+				}else if(str=='bad'){
+					paperEvaluate({
+						id: this.id
+					}).then(response => {
+						that.$modal.msg('评价成功！');	
+					})
+				}
+			},
 			navTo(url) {
 				this.$tab.navigateTo(url)
 			},
@@ -533,7 +567,14 @@
 		margin-top: 30rpx;
 		// min-height: calc(100vh - 300rpx);
 	}
-
+	.author-tag{
+		margin-right: 5rpx;
+		/deep/.uni-tag--primary {
+		  background-color: #3B00FF;
+		  border-color: #3B00FF;
+		  color: #fff;
+		}
+	}
 	.content {
 		margin-top: 30rpx;
 		padding-bottom: 100rpx;
@@ -859,4 +900,35 @@
 		height: calc(100vh - 100rpx);
 		// background-color: #f5f8fa;
 	}
+	
+	.example{
+		margin-top: 20rpx;
+		textarea{
+			text-align: center!important;
+			font-size: 36rpx;
+		}
+		.tips{
+			text-align: center;
+			font-size: 32rpx;
+			// font-weight: bolder;
+			// letter-spacing: 1rpx;
+		}
+		.button-group {
+			margin-top: 15px;
+			display: flex;
+			justify-content: space-around;
+		}
+		
+		.goodBtn {
+			// text-align: center;
+			// width: 40%;
+			background: #3B00FF!important;
+		}
+		.badBtn {
+			// text-align: center;
+			// width: 40%;
+			background: #ff5f33!important;
+		}
+	}
+	
 </style>
