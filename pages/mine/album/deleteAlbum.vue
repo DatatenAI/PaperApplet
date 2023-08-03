@@ -20,7 +20,8 @@
 	import config from '@/config'
 	import {
 		addFavorite,
-		editFavorite
+		editFavorite,
+		deleteFavorite
 	} from '@/api/mine/index.js';
 	export default {
 		data() {
@@ -40,7 +41,7 @@
 		},
 		onLoad(option) {
 			this.query.favoriteId = parseInt(option.id);
-			// console.log("@@@edit album id",this.query.favoriteId)
+			console.log("@@@edit album id",this.query.favoriteId)
 		},
 		onReady() {},
 		onShow() {
@@ -54,12 +55,12 @@
 		methods: {
 			editFavoritePaper() {
 				var that = this;
-				// console.log("------id-----",that.user.openId,that.query.favoriteId)
+				console.log("------id-----",that.user.openId,that.query.favoriteId)
 				
 			},
 			submit(ref) {
 				var that = this;
-				// console.log("------id-----",that.user.openId,that.query.favoriteId)
+				console.log("------id-----",that.user.openId,that.query.favoriteId)
 				editFavorite({
 					userId: that.user.id || null,
 					openId: that.user.openId || '',
@@ -67,10 +68,7 @@
 					favoriteId: that.query.favoriteId || 0,
 				}).then(
 				response => {
-					// console.log("response from edit",response);
-					setTimeout(function() {
-						that.navSwitchPage('/pages/mine');
-					}, 1500)
+					console.log("response from edit",response);
 					// that.list = that.list.concat(response);
 				})
 				// addFavorite({

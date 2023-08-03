@@ -49,6 +49,15 @@ export function editFavorite(data) {
   })
 }
 
+export function deleteFavorite(data) {
+  return request({
+    url: '/api/trpc/wxFavorite.deleteFavorite',
+    method: 'Post',
+	data: data,
+    timeout: 20000
+  })
+}
+
 // 创建反馈 接口   userId,openId,favoriteName  收藏夹名称
 export function addFeedback(data) {
   return request({

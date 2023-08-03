@@ -147,7 +147,8 @@
 									title="edit新专辑" clickable @click="navTo(`/pages/mine/album/editAlbum?id=${item.id}`)" />
 							</view>
 							<view class="uni-list album"><button open-type="getAlbumInfo" clickable @click="navTo(`/pages/mine/album/editAlbum?id=${item.id}`)">edit album name</button></view>
-							<view class="btn"><button open-type="deleteAlbum" @click="deleteAlbum">delete album</button></view>
+							<!-- <view class="uni-list album"><button open-type="getAlbumInfo" clickable @click="navTo(`/pages/mine/album/deleteAlbum?id=${item.id}`)">delete album</button></view> -->
+							<view class="btn"><button open-type="deleteAlbum" @click="deleteAlbum(item.id)">delete album</button></view>
 						</view>
 					</view>
 				</view>
@@ -344,7 +345,8 @@
 		searchMyLike,
 		searchSummaryHistory,
 		scarchFavorite,
-		scarchFavoritePaper
+		scarchFavoritePaper,
+		deleteFavorite
 	} from '@/api/mine/index.js'
 
 	import {
@@ -536,10 +538,24 @@
 		},
 		methods: {
 			editAlbumName(iid){
-				console.log("----edit name----",iid);
+				// console.log("----edit name----",iid);
 			},
-			deleteAlbum(e){
-				console.log("------delete name----");
+			deleteAlbum(id){
+				var that=this;
+				// console.log("------delete name----with id",id,that.user.openId,that.user.id,parseInt(id, 10));
+				deleteFavorite({
+					userId: that.user.id || null,
+					openId: that.user.openId || '',
+					favoriteId: parseInt(id, 10) || 0,
+				}).then(
+				response => {
+					// console.log("response from edit",response);
+					setTimeout(function() {
+						that.navSwitchPage('/pages/mine');
+					}, 1500)
+					//window.location.reload();
+					// that.list = that.list.concat(response);
+				})
 			},
 			resetData(){
 				this.sHistoryQuery = {
