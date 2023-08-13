@@ -14,7 +14,7 @@
 		</view>
 		
 		<view class="nodata" v-if="announceList.length == 0">
-			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+			<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix"></image>
 		</view>
 	</view>
 </template>

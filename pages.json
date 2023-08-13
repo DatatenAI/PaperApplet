@@ -5,12 +5,18 @@
 			/*#ifdef  H5*/
 			"navigationStyle": "custom",
 			/*#endif*/
-			"navigationBarTitleText": "首页"
+			"navigationBarTitleText": "连接人和知识"
 		}
 	}, {
 		"path": "pages/mine",
 		"style": {
 			"navigationBarTitleText": "我的",
+			"navigationStyle": "custom"
+		}
+	}, {
+		"path": "pages/applications",
+		"style": {
+			"navigationBarTitleText": "应用",
 			"navigationStyle": "custom"
 		}
 	}, {
@@ -195,12 +201,17 @@
 			"pagePath": "pages/index",
 			"iconPath": "static/images/tabbar/home.png",
 			"selectedIconPath": "static/images/tabbar/home_.png",
-			"text": "首页"
+			"text": ""
+		}, {
+			"pagePath": "pages/applications",
+			"iconPath": "static/images/tabbar/application.png",
+			"selectedIconPath": "static/images/tabbar/application_.png",
+			"text": ""
 		}, {
 			"pagePath": "pages/mine",
 			"iconPath": "static/images/tabbar/mine.png",
 			"selectedIconPath": "static/images/tabbar/mine_.png",
-			"text": "我的"
+			"text": ""
 		}]
 	},
 	"globalStyle": {

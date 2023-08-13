@@ -3,7 +3,7 @@
 		<view class="header_box">
 			<view class="topBar">
 				<view class="notice_box" @click="navTo('/pages/common/notice/list')">
-					<uni-icons type="notification" size="24"></uni-icons>
+					<uni-icons type="notification" size="18" color="#0f80ff"></uni-icons>
 				</view>
 				<view class="tab_box">
 					<view class="item" :class="{'active':tabIndex == 0}" @click="changeTab(0)"
@@ -11,8 +11,8 @@
 					<view class="item" :class="{'active':tabIndex == 1}" @click="changeTab(1)">订阅</view>
 					<!-- <view class="item" :class="{'active':tabIndex == 2}" @click="changeTab(2)">热榜</view> -->
 				</view>
-				<view class="search_box" @click="navTo('/pages/common/search/index')">
-					<uni-icons type="search" size="24"></uni-icons>
+				<view class="search_box" @click="navTo('/pages/common/search/index') ">
+					<uni-icons type="search" size="18" color="#0f80ff"></uni-icons>
 				</view>
 			</view>
 
@@ -20,7 +20,7 @@
 				<fastTab :list="tabData" :active-index.sync="activeIndex" @on-change="change" class="tab_box">
 				</fastTab>
 
-				<uni-icons type="plusempty" size="24" color="#333" class="more"
+				<uni-icons type="plusempty" size="18" color="#0f80ff" class="more"
 					@click="navTo(`/pages/home/subscribe/index`)"></uni-icons>
 			</view>
 		</view>
@@ -55,7 +55,7 @@
 			</view>
 			
 			<view class="nodata" v-if="list.length == 0">
-				<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+				<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix"></image>
 			</view>
 		</uni-transition>
 
@@ -87,7 +87,7 @@
 				
 				
 				<view class="nodata" v-if="tbrList.length == 0">
-					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix"></image>
+					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix"></image>
 				</view>
 			</view>
 		</uni-transition>
@@ -585,13 +585,14 @@
 <style lang="scss">
 	.page {
 		// padding-top: 56rpx;
+		
 	}
 
 	.header_box {
 		width: calc(100% - 40rpx);
 		position: fixed;
 		top: 0;
-		background-color: #f5f8fa;
+		// background-color: #f5f8fa;
 		z-index: 6;
 		box-sizing: border-box;
 	}
