@@ -14,7 +14,6 @@
 			</view>
 			<view class="login_box" @click="navTo('/pages/login')">
 				<text>请登录/注册</text>
-				<text>ID:xxxxxx</text>
 			</view>
 		</view>
 
@@ -28,7 +27,6 @@
 
 			<view class="login_box" @click="navTo(`/pages/mine/info/index`)">
 				<text>{{user.nickName}}</text>
-				<text>ID:{{user.id}}</text>
 			</view>
 		</view>
 
