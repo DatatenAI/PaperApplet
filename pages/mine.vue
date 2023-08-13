@@ -30,13 +30,13 @@
 			</view>
 		</view>
 
-		<view class="per_box" @click="navTo(`/pages/mine/info/edit`)" v-if="user.openId">
+		<!-- <view class="per_box" @click="navTo(`/pages/mine/info/edit`)" v-if="user.openId">
 			{{ user.intro || "请填写自定义介绍"}}
 		</view>
 
 		<view class="per_box" @click="navTo(`/pages/login`)" v-else>
 			登录后自定义个人介绍
-		</view>
+		</view> -->
 
 		<view class="section_box_1">
 			<!-- @click="navToPageAuth(`/pages/community/list?openid=${user.openid}`)" -->
@@ -105,7 +105,7 @@
 				</view>
 
 				<view class="nodata" v-if="articleList.length == 0">
-					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png"
+					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg"
 						mode="widthFix"></image>
 				</view>
 			</view>
@@ -144,7 +144,7 @@
 				</view>
 
 				<view class="nodata" v-if="albumList.length == 0">
-					<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png"
+					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg"
 						mode="widthFix"></image>
 				</view>
 			</view>
@@ -304,17 +304,17 @@
 		</uni-drawer>
 
 		<view class="nodata" v-if="approveList.length == 0 && tabIndex == 1 && user.openId">
-			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix">
+			<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix">
 			</image>
 		</view>
 
 		<view class="nodata" v-if="sHistoryList.length == 0 && tabIndex == 2 && subTabIndex2 == 0 && user.openId">
-			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix">
+			<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix">
 			</image>
 		</view>
 
 		<view class="nodata" v-if="zHistoryList.length == 0 && tabIndex == 2 && subTabIndex2 == 1 && user.openId">
-			<image src="https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/nodata.png" mode="widthFix">
+			<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix">
 			</image>
 		</view>
 	</view>
@@ -877,7 +877,9 @@
 
 <style lang="scss">
 	.page {
-		background-image: url("https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/mine-chatpaper-bg.png");
+		// background-image: url("https://btgongpluss.oss-cn-beijing.aliyuncs.com/wxapp/images/mine-chatpaper-bg.png");
+		background-image: url("https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/bg.svg");
+		// background-image: require("/Users/gus/Desktop/bg.png");
 		background-repeat: no-repeat;
 		background-size: 100% auto;
 	}
@@ -925,7 +927,7 @@
 
 	.per_box {
 		height: 80rpx;
-		color: #fff;
+		color: #000000;
 		font-size: 28rpx;
 		padding: 10rpx 20rpx;
 		margin: 20rpx 0;
@@ -1012,7 +1014,7 @@
 			flex-direction: column;
 			flex-wrap: nowrap;
 			justify-content: center;
-			color: #fff;
+			color: #000000;
 			margin-left: 20rpx;
 			font-size: 28rpx;
 
@@ -1028,13 +1030,17 @@
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
-		padding: 40upx 0;
+		padding: 40rpx 0;
 
 		.item {
 			width: 33%;
-			color: #fff;
+			color: #000000;
 			text-align: center;
-			border-right: 1px solid #fff;
+			// border-right: 1px solid #000000;
+			padding-bottom: 10px;
+			padding-top: 10px;
+			border-bottom: 2px solid #000000;
+			// border-top: 1px solid #000000;
 
 			.num {
 				font-size: 28upx;
