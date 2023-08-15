@@ -1,8 +1,9 @@
 // 应用全局配置
 module.exports = {
 	staticUrl: 'https://chatwithpapers.oss-cn-hongkong.aliyuncs.com/images/',
-	// baseUrl: 'https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run',
-	baseUrl: 'http://localhost:3000',//192.168.88.121
+	baseUrl: 'https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run',
+	// TODO(yjb): checkout docs for HBuilder of switching configs between dev and prod.
+	// baseUrl: 'http://localhost:3000',//192.168.88.121
 	// baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
 	// baseUrl: 'https://chatPaper.carmela.tech',
 	

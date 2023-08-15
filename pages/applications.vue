@@ -9,26 +9,19 @@
 		
 		<view class="app-list">
 			<view class="item">
-				<view @click="navTo(`/pages/applications/detail/detail?id=ICML`)">
-					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_star.png" style="width: 100rpx;" mode="widthFix"></image>
+				<view @click="navTo(`/pages/applications/conference/conference`)">
+					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_star.png" style="width: 120rpx;" mode="widthFix"></image>
 				</view>
-				<view class="title bolder" @click="navTo(`/pages/applications/detail/detail?id=ICML`)">
-					ICML
+				<view class="title bolder" @click="navTo(`/pages/applications/conference/conference`)">
+					计算机顶会总结
 				</view>
 			</view>
 			
-			<view class="item">
-				<view @click="navTo(`/pages/applications/detail/detail?id=研报总结`)">
-					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_star.png" style="width: 100rpx;" mode="widthFix"></image>
-				</view>
-				<view class="title bolder" @click="navTo(`/pages/applications/detail/detail?id=ICML`)">
-					研报总结
-				</view>
-			</view>
 			
 			<view class="item">
 				<view>
-					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_noready.png" style="width: 80rpx;" mode="widthFix"></image>
+					<!-- <image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_noready.png" style="width: 80rpx;" mode="widthFix"></image> -->
+					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_noready.png" style="width: 120rpx;" mode="widthFix"></image>
 				</view>
 				<view class="title bolder">
 					Coming soon ...
@@ -92,37 +85,30 @@
 	}
 	
 	.app-list {
-		// padding-top: ;
+		padding-top: 30%;
 		display: flex;
+		flex-wrap: wrap;
 		// flex-direction: row;
-		// align-items: flex-end;
-		justify-content: center;
+		align-items: flex-start;
+		align-content: flex-start;
+		justify-content: left;
+		// justify-content: space-around;
+		
 		// width: 100%;
-		// column-count: 3;
+		// column-count: 2;
 		// column-gap: 5rpx;
 		// padding-top: 150rpx;
 	
 		.item {
 			display: flex;
 			flex-direction: column;
-			justify-content: center;
-			  /* align-self: center;    <---- REMOVE */
+			// justify-content: center;
+			// /* align-self: center;    <---- REMOVE */
 			align-items: center;
 			
-			width: calc(60% - 20rpx);
+			width: calc(50% - 40rpx);
 			break-inside: avoid;
 			margin: 20rpx;
-			// margin-bottom: 30rpx;
-			// padding-bottom: 10rpx;
-			// box-sizing: border-box;
-			// // background-color: #fff;
-			// border-radius: 6rpx;
-	
-			// image {
-			// 	width: 100%;
-			// 	display: block;
-			// 	border-radius: 6rpx;
-			// }
 	
 			.title {
 				width: 100%;
@@ -141,16 +127,6 @@
 				// -webkit-box-orient: vertical
 			}
 			
-			// .thumb {
-			// 	width: 100%;
-				
-			// 	// height: 176rpx;
-			// 	image {
-			// 		width: 100rpx;
-			// 		height: 100rpx;
-			// 		object-fit: cover; 
-			// 	}
-			// }
 		}
 	}
 	

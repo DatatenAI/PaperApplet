@@ -157,6 +157,7 @@
 			// xWxmlToCanvas
 		},
 		data() {
+
 			return {
 				config:config,
 				imgSrc:'/static/logo200.png',
