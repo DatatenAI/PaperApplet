@@ -195,7 +195,12 @@
 		//公共部分
 		"root": "pages/applications",
 		"pages": [{
-			"path": "detail/detail",
+			"path": "conference/conference",
+			"style": {
+				"navigationBarTitleText": "顶会总结"
+			}
+		}, {
+			"path": "conference/detail",
 			"style": {
 				"navigationBarTitleText": "顶会详情"
 			}
