@@ -39,7 +39,7 @@
 						v-if="item.summary[0]">{{ item.summary[0].titleZh }}
 					</view>
 					<view class="bottom">
-						<text style="color:#999">{{ item.createTime | formatDate }}</text>
+						<text style="color:#999">{{ item.pubTime | formatDate }}</text>
 					</view>
 					<view class="bottom">
 						<view class="source_box">

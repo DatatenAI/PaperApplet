@@ -35,7 +35,7 @@
 						<text class="value">{{data.authors}}</text>
 					</view>
 					<view class="box1 time">
-						<text class="label">时间：{{data.createTime | formatDate}}</text>
+						<text class="label">时间：{{data.pubTime | formatDate}}</text>
 						<text class="value"></text>
 					</view>
 					<!-- <view class="box1 author">
