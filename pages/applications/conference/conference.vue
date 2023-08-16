@@ -22,12 +22,15 @@
 			<view class="list_1"  v-if="tbrList.length > 0">
 				<!-- @touchstart="touchStart" @touchend="touchEnd" -->
 				<view class="item" v-for="(item,index) in tbrList">
-					<view class="content" @click="navTo(`/pages/applications/conference/detail?id=${item.id}`)">
+					<view class="content" @click="navTo(`/pages/applications/conference/detail?id=${item.id}&year=${item.year}`)">
 						<view class="title" v-if="item.id">
 							{{ item.id }}总结
 						</view>
+						<view class="bottom" v-if="item.id">
+							{{ item.full_name }} - {{ item.year }}
+						</view>
 					</view>
-					<view class="thumb" @click="navTo(`/pages/applications/conference/detail?id=${item.id}`)" v-if="item.id">
+					<view class="thumb" @click="navTo(`/pages/applications/conference/detail?id=${item.id}&year=${item.year}`)" v-if="item.id">
 						<!-- <image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image> -->
@@ -137,8 +140,9 @@
 				
 				id: '',
 				tbrList: [
-					{id: "ICML"},
-					{id: "CVPR"},
+					{id: "ICML", year: 2022, full_name:"International Conference on Machine Learning"},
+					{id: "ICML", year: 2023, full_name:"International Conference on Machine Learning"},
+					{id: "CVPR", year: 2022, full_name:"Computer Vision and Pattern Recognition"},
 				]
 			}
 		},
@@ -218,47 +222,65 @@
 		// width: 90%;
 	
 		.item {
+			// display: flex;
+			// flex-direction: row;
+			
+			// justify-content: space-between;
+			// align-items: center;
+			// align-content: center;
+			
+			// background-color: #fff;
+			width: 90%;
+
+			// margin-bottom: 30rpx;
+			border: 2px solid #333; 
+			border-radius: 6rpx;
+			// border-radius: 15rpx;
 			display: flex;
 			flex-direction: row;
-			
 			justify-content: space-between;
 			align-items: center;
 			align-content: center;
-			
 			background-color: #fff;
-			width: 90%;
-
 			margin-bottom: 30rpx;
-			border: 1px solid #333; 
-			border-radius: 15rpx;
+			// padding: 20rpx 15rpx;
 			// padding: 20rpx 15rpx;
 	
 			.content {
-				width: calc(100% - 150rpx);
+				width: calc(100% - 220rpx);
 				display: flex;
 				flex-direction: column;
-				justify-content: center;
-				align-items: center;
+				justify-content: space-between;
 				background-color: #fff;
-	
+				
 				.title {
 					// height: 120rpx;
 					color: #333;
-					font-size: 16px;
 					word-break: normal;
+					font-size: 30rpx;
+					font-weight: bold;
 					overflow: hidden;
 					text-overflow: ellipsis;
-					display: -webkit-box;
 					-webkit-line-clamp: 3;
+					display: -webkit-box;
 					-webkit-box-orient: vertical;
-					// margin-bottom: 10rpx;
+					margin-bottom: 10rpx;
+				}
+				
+				.bottom {
+					font-size: 24rpx;
+					color: #999;
+				
+					text {
+						margin-right: 10rpx;
+					}
 				}
 			}
 	
 			.thumb {
-				width: 150rpx;
-				height: 150rpx;
-				padding: 5rpx 5rpx;
+				width: 220rpx;
+				height: 220rpx;
+				padding: 30rpx 30rpx;
 				image {
 					width: 100%;
 					height: 100%;

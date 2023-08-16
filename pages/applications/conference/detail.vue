@@ -15,7 +15,7 @@
 		<view class="content">
 			<view class="information">
 				<view class="title hr">
-					{{data.conference}}合集
+					{{data.conference}}合集 - {{data.year}}
 				</view>
 			</view>
 		</view>
@@ -147,15 +147,11 @@
 			}
 		},
 		onLoad(options) {
-			// console.log("详情页：" + JSON.stringify(options));
-			wx.showShareMenu({
-				withShareTicket: true,
-				//设置下方的Menus菜单，才能够让发送给朋友与分享到朋友圈两个按钮可以点击
-				menus: ["shareAppMessage", "shareTimeline"]
-			})
+			console.log("详情页：" + JSON.stringify(options));
 			this.id = options.id;
 			var that = this;
 			that.data.conference = options.id;
+			that.data.year = parseInt(options.year);
 			if (getUser()) {
 				that.user = JSON.parse(getUser()) || {}
 			}
@@ -204,6 +200,7 @@
 					userId: that.user.id || null,
 					openId: that.user.openId || '',
 					conference: that.data.conference,
+					year: that.data.year,
 					pageNum: that.query.pageNum,
 					pageSize: that.query.pageSize,
 				}).then(response => {
