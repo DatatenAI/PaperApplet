@@ -15,7 +15,7 @@
 		<view class="content">
 			<view class="information">
 				<view class="title hr">
-					{{data.id}}
+					{{data.conference}}合集
 				</view>
 			</view>
 		</view>
@@ -67,6 +67,9 @@
 		addRead,
 		cancelRead
 	} from '@/api/home/index.js'
+	import {
+		searchConferencePaper
+	} from '@/api/applications/index.js'
 
 	import config from '@/config.js';
 
@@ -152,7 +155,7 @@
 			})
 			this.id = options.id;
 			var that = this;
-			that.data.id = options.id;
+			that.data.conference = options.id;
 			if (getUser()) {
 				that.user = JSON.parse(getUser()) || {}
 			}
@@ -196,10 +199,11 @@
 			},
 			getArticles() {
 				var that = this;
-				searchPaper({
+				console.log("Running conference of", that.data.conference);
+				searchConferencePaper({
 					userId: that.user.id || null,
 					openId: that.user.openId || '',
-					keywords: that.query.keywords,
+					conference: that.data.conference,
 					pageNum: that.query.pageNum,
 					pageSize: that.query.pageSize,
 				}).then(response => {

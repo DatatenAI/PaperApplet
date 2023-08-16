@@ -22,8 +22,8 @@
 			<view class="list_1"  v-if="tbrList.length > 0">
 				<!-- @touchstart="touchStart" @touchend="touchEnd" -->
 				<view class="item" v-for="(item,index) in tbrList">
-					<view class="content">
-						<view class="title" @click="navTo(`/pages/applications/conference/detail?id=${item.id}`)" v-if="item.id">
+					<view class="content" @click="navTo(`/pages/applications/conference/detail?id=${item.id}`)">
+						<view class="title" v-if="item.id">
 							{{ item.id }}总结
 						</view>
 					</view>
@@ -137,8 +137,8 @@
 				
 				id: '',
 				tbrList: [
-					{id: "ICML2023"},
-					{id: "CVPR2023"},
+					{id: "ICML"},
+					{id: "CVPR"},
 				]
 			}
 		},
@@ -220,15 +220,17 @@
 		.item {
 			display: flex;
 			flex-direction: row;
+			
 			justify-content: space-between;
 			align-items: center;
-			// align-content: center;
+			align-content: center;
+			
 			background-color: #fff;
 			width: 90%;
 
 			margin-bottom: 30rpx;
 			border: 1px solid #333; 
-			border-radius: 12rpx;
+			border-radius: 15rpx;
 			// padding: 20rpx 15rpx;
 	
 			.content {
@@ -261,60 +263,6 @@
 					width: 100%;
 					height: 100%;
 				}
-			}
-			.bottom {
-				padding: 10rpx 15rpx;
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-				align-items: center;
-				align-content: center;
-			
-				.source_box {
-					width: calc(100% - 130rpx);
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					align-content: center;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					-webkit-line-clamp: 1;
-					display: -webkit-box;
-					white-space: normal;
-					-webkit-box-orient: vertical;
-			
-					.avatar {
-						width: 40rpx;
-						height: 40rpx;
-						border-radius: 50%;
-					}
-			
-					text {
-						font-size: 24rpx;
-						color: #999;
-						margin-left: 10rpx;
-					}
-				}
-			
-				.btn_box {
-					font-size: 24rpx;
-					white-space: nowrap;
-			
-					.btn {
-						background-color: #3B00FF;
-						color: #fff;
-						border-radius: 20rpx;
-						padding: 5rpx 15rpx;
-					}
-					
-					.join-btn {
-						color: #3B00FF;
-						border: 1px solid #3B00FF;
-						border-radius: 20rpx;
-						padding: 5rpx 15rpx;
-					}
-				}
-			
 			}
 		}
 	}
