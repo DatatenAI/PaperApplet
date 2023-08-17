@@ -30,7 +30,7 @@
 		onLoad(event) {
 			this.params = event;
 			this.params.url = `${config.webViewUrl}?userId=${this.params.id}&openId=${this.params.openId}&id=${this.params.id}`;
-			console.log(JSON.stringify(this.url));
+			console.log(JSON.stringify(this.params.url));
 			console.log(JSON.stringify(this.params));
 			if (event.title) {
 				uni.setNavigationBarTitle({

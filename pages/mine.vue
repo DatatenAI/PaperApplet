@@ -4,7 +4,7 @@
 		<view class="statusBar" :style="{ paddingTop: statusBarHeight + 'px' }"></view>
 
 		<view class="bar_box">
-			<uni-icons type="bars" size="24" color="#fff" @click="showDrawer('showLeft')"></uni-icons>
+			<uni-icons type="bars" size="24" color="#333" @click="showDrawer('showLeft')"></uni-icons>
 		</view>
 
 		<view class="info_box" v-if="!user.openId">
@@ -254,8 +254,8 @@
 			<!-- @click="closeDrawer('showLeft')" -->
 			<view class="logo_box">
 				<view class="logo">
-					<image src="/static/logo.png" mode="widthFix"></image>
-					<text>量拾</text>
+					<image src="/static/logo200.png" mode="widthFix"></image>
+					<!-- <text>量拾</text> -->
 				</view>
 				<uni-icons type="closeempty" size="18" color="#999" @click="closeDrawer('showLeft')"></uni-icons>
 			</view>
@@ -890,7 +890,7 @@
 	}
 
 	/deep/ .uni-drawer__content {
-		background-color: #0e0e10 !important;
+		background-color: #666 !important;
 		padding: 30rpx 20rpx;
 	}
 
@@ -901,7 +901,7 @@
 		align-items: center;
 		align-content: center;
 		align-self: center;
-		margin-bottom: 30rpx;
+		margin-bottom: 20rpx;
 
 		.logo {
 			display: flex;
@@ -912,16 +912,15 @@
 
 			text {
 				font-size: 36rpx;
-				color: #fff;
+				color: #111;
 				margin-left: 20rpx;
 				font-weight: bolder;
 			}
 		}
 
-
-
 		image {
-			width: 64rpx;
+			width: 196rpx;
+			height: 196rpx;;
 		}
 	}
 
@@ -935,7 +934,8 @@
 
 	.card_box {
 		width: 100%;
-		background-color: #1a191e;
+		// background-color: #1a191e;
+		background-color: #333;
 		border-radius: 6rpx;
 		margin-bottom: 30rpx;
 		padding: 0rpx 20rpx;

@@ -84,8 +84,9 @@
 		font-weight: bold;
 	}
 	
+	
 	.app-list {
-		padding-top: 30%;
+		padding-top: 50%;
 		display: flex;
 		flex-wrap: wrap;
 		// flex-direction: row;

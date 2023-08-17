@@ -95,7 +95,7 @@
 
 .section h2 {
 	font-size: 18px;
-	background-image: url('../images/wj.png');
+	/* background-image: url('../images/wj.png'); */
 	background-repeat: no-repeat;
 	background-position: left center;
 	text-indent: 30px;

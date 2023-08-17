@@ -1,9 +1,10 @@
 <template>
   <view class="about-container">
     <view class="header-section text-center">
-      <image style="width: 150rpx;height: 150rpx;" src="/static/logo200.png" mode="widthFix">
+      <image style="width: 200rpx;height: 200rpx;" src="/static/logo200.png" mode="widthFix">
       </image>
-      <uni-title type="h2" title="量拾"></uni-title>
+	  
+      <!-- <uni-title type="h2" title="量拾"></uni-title> -->
     </view>
 
     <view class="content-section">
@@ -17,7 +18,7 @@
         <view class="list-cell list-cell-arrow">
           <view class="menu-item-box">
             <view>官方邮箱</view>
-            <view class="text-right">info@chatPaper.org</view>
+            <view class="text-right">info@dataten.ai</view>
           </view>
         </view>
         <view class="list-cell list-cell-arrow">
@@ -38,7 +39,7 @@
     </view>
 
     <view class="copyright">
-      <view>Copyright &copy; 2022 ahzytech.com All Rights Reserved.</view>
+      <view>Copyright &copy; 2023 dataten.ai, All Rights Reserved.</view>
     </view>
   </view>
 </template>
