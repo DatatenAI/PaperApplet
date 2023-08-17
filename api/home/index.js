@@ -122,7 +122,26 @@ export function addLike(query) {
   })
 }
 
-// 添加点赞
+// 更新点踩
+export function addDislike(query) {
+  return request({
+    url: '/api/trpc/wxLike.addDislike',
+    method: 'get',
+    data: query
+  })
+}
+
+// 更新点赞
+export function updateLike(query) {
+  return request({
+    url: '/api/trpc/wxLike.updateLike',
+    method: 'Post',
+    data: query,
+	timeout: 20000
+  })
+}
+
+// 取消点赞或点踩
 export function cancelLike(query) {
   return request({
     url: '/api/trpc/wxLike.cancelLike',

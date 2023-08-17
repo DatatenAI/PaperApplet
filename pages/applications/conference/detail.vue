@@ -11,12 +11,17 @@
 			</view>
 		</view> -->
 		<!-- 轮播图 -->
-
-		<view class="content">
-			<view class="information">
-				<view class="title hr">
-					{{data.conference}}合集 - {{data.year}}
+		<view class="header_box">
+			<view class="content">
+				<view class="information">
+					<view class="title hr">
+						{{data.conference}}合集
+					</view>
 				</view>
+			</view>
+			<view class="list_tab">
+				<fastTab :list="conference_years" :active-index.sync="activeIndex" @on-change="change" class="tab_box">
+				</fastTab>
 			</view>
 		</view>
 		<uni-transition ref="ani" :mode-class="animationSetting[0].modeClass" :show="animationSetting[0].show">
@@ -72,15 +77,10 @@
 	} from '@/api/applications/index.js'
 
 	import config from '@/config.js';
-
-	import uParse from '@/components/u-parse/u-parse.vue';
-	import MDParserHighlight from '@/pages/home/components/cmder-MDParserHighlight/index.vue';
-	// import XQGeneratePoster from '@/pages/home/components/XQGeneratePoster/XQGeneratePoster.vue';
+	import fastTab from '@/components/fast-tab/fast-tab';
 	export default {
 		components: {
-			uParse,
-			MDParserHighlight,
-			// XQGeneratePoster
+			fastTab
 		},
 		filters: {
 			formatDate(time) {
@@ -105,6 +105,17 @@
 					pageNum: 1,
 					pageSize: 10
 				},
+				activeIndex: 0,
+				conference_years: [{
+					id: 0,
+					keywordShort: 2021,
+				},{
+					id: 1,
+					keywordShort: 2022,
+				},{
+					id: 2,
+					keywordShort: 2023,
+				}],
 				dataImageHeight:[],
 				deliveryFlag: false, //
 				current: 0,
@@ -151,20 +162,33 @@
 			this.id = options.id;
 			var that = this;
 			that.data.conference = options.id;
-			that.data.year = parseInt(options.year);
+			that.data.year = that.conference_years[that.activeIndex].keywordShort;
 			if (getUser()) {
 				that.user = JSON.parse(getUser()) || {}
 			}
-			that.getArticles();
+			
 		},
 		onShow() {
-
+			var that = this;
+			that.getArticles();
 		},
 		created() {},
 		methods: {
-			change(e) {
-				console.log('当前模式：' + e.type + ',状态：' + e.show);
+			change(key, item) {
+				console.log('当前模式', key, item);
 				this.conference_list = [];
+				
+				var that = this;
+				
+				// if (item == '全部') {
+				// 	that.query.keywords = '';
+				// } else {
+				// 	that.query.keywords = item.keywordShort
+				// }
+				that.data.year = item.keywordShort;
+				console.log("receive", item, that.activeIndex);
+				that.query.pageNum = 1;
+				that.getArticles();
 			},
 			doRead(index, id, status) {
 				var that = this;
@@ -192,6 +216,16 @@
 						that.conference_list[index].waitFlag = false;
 					})
 				}
+			},
+			onReachBottom() {
+				var that = this;
+				// 判断下一页是否存在数据，不存在将显示暂无数据等提示语
+				// if (that.activityList.length == that.query.total) {
+				// 	that.noMoreData = true;
+				// 	return false;
+				// }
+				that.query.pageNum++; //页数加一
+				that.getArticles(); //回调接口			
 			},
 			getArticles() {
 				var that = this;
@@ -226,9 +260,18 @@
 
 <style lang="scss" scoped>
 	.page {
-		padding-bottom: calc(152rpx + env(safe-area-inset-bottom));
-		margin-top: 30rpx;
+		// padding-bottom: calc(152rpx + env(safe-area-inset-bottom));
+		// margin-top: 30rpx;
 		// min-height: calc(100vh - 300rpx);
+	}
+	
+	.header_box {
+		width: calc(100% - 40rpx);
+		position: relative;
+		top: 0;
+		// background-color: #f5f8fa;
+		z-index: 6;
+		box-sizing: border-box;
 	}
 
 	.content {
@@ -248,7 +291,7 @@
 			font-weight: 550;
 			font-size: 36rpx;
 			line-height: 28px;
-			color: #333333;
+			color: #333;
 		}
 
 		.hr {
@@ -257,8 +300,40 @@
 			border-bottom: 1px solid #aaa;
 		}
 	}
-
 	
+	.list_tab {
+		// width: calc(100% - 40rpx);
+		// position: absolute;
+		// top: 84rpx ;
+		// background-color: #f5f8fa;
+		z-index: 66;
+		width: 100%;
+		// height: auto;
+		position: relative;
+		// padding-top: 92rpx;
+		padding-bottom: 15rpx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		align-content: center;
+		box-sizing: border-box;
+	
+		.tab_box {
+			width: calc(100% - 60rpx) !important;
+			color: #333;
+			z-index: 66;
+		}
+	
+		.more {
+			// width:60rpx ;
+			position: relative;
+			// top: -10rpx;
+			// right: 0;
+			// z-index: 77;
+		}
+	}
+
 	.list {
 		position: relative;
 		column-count: 2;

@@ -78,21 +78,31 @@
 				</view>
 			</view>
 			<view class="right">
-				<view class="item" @click="doLike()" v-if="!data.likeFlag">
-					<uni-icons type="hand-up" size="24" color="#333"></uni-icons>
-					<text>点赞</text>
+				<view class="item" @click="doLike()" v-if="data.likeFlag != 2">
+					<uni-icons type="hand-up" size="30" color="#333"></uni-icons>
+					<!-- <text>点赞</text> -->
 				</view>
-				<view class="item" @click="doLike()" v-else>
-					<uni-icons type="hand-up" size="24" color="#3B00FF"></uni-icons>
-					<text>取消点赞</text>
+				<view class="item" @click="doLike()" v-if="data.likeFlag == 2">
+					<uni-icons type="hand-up-filled" size="30" color="#3B00FF"></uni-icons>
+					<!-- <text>取消点赞</text> -->
 				</view>
+				
+				<view class="item" @click="doDislike()" v-if="data.likeFlag != 1">
+					<uni-icons type="hand-down" size="30" color="#333"></uni-icons>
+					<!-- <text>点踩</text> -->
+				</view>
+				<view class="item" @click="doDislike()" v-if="data.likeFlag == 1">
+					<uni-icons type="hand-down-filled" size="30" color="#3B00FF"></uni-icons>
+					<!-- <text>取消点踩</text> -->
+				</view>
+				
 				<view class="item" @click="toggle('bottom')" v-if="!data.favoriteFlag">
-					<uni-icons type="star" size="24" color="#333"></uni-icons>
-					<text>收藏</text>
+					<uni-icons type="star" size="30" color="#333"></uni-icons>
+					<!-- <text>收藏</text> -->
 				</view>
 				<view class="item" @click="doFavorite()" v-else>
-					<uni-icons type="star" size="24" color="#3B00FF"></uni-icons>
-					<text>取消收藏</text>
+					<uni-icons type="star-filled" size="30" color="#3B00FF"></uni-icons>
+					<!-- <text>取消收藏</text> -->
 				</view>
 			</view>
 		</view>
@@ -163,6 +173,8 @@
 	import {
 		paperDetail,
 		addLike,
+		addDislike,
+		updateLike,
 		cancelLike,
 		addFavoritePaper,
 		scarchFavorite,
@@ -298,6 +310,7 @@
 				menus: ['shareAppMessage', 'shareTimeline']
 			})
 
+
 			// return {
 			// 	title: that.data.title, //分享的名称
 			// 	path: `/pages/home/detail/detail?id=${that.data.id}`,
@@ -416,13 +429,23 @@
 					return false;
 				}
 
-				if (!that.data.likeFlag) {
+				if (that.data.likeFlag == 0) {
 					addLike({
 						userId: that.user.id || null,
 						openId: that.user.openId || '',
 						paperId: parseInt(that.data.id),
 					}).then(response => {
-						that.data.likeFlag = true;
+						that.data.likeFlag = 2;
+						that.$modal.msg('点赞成功');
+					})
+				} else if (that.data.likeFlag == 1) {
+					updateLike({
+						userId: that.user.id || null,
+						openId: that.user.openId || '',
+						paperId: parseInt(that.data.id),
+						like: true
+					}).then(response => {
+						that.data.likeFlag = 2;
 						that.$modal.msg('点赞成功');
 					})
 				} else {
@@ -431,11 +454,49 @@
 						openId: that.user.openId || '',
 						paperId: parseInt(that.data.id),
 					}).then(response => {
-						that.data.likeFlag = false;
+						that.data.likeFlag = 0;
 						that.$modal.msg('取消点赞成功');
 					})
 				}
 
+			},
+			doDislike() {
+				var that = this;
+				if (!that.user.id || !that.user.openId) {
+					that.$modal.msg('请登录');
+					return false;
+				}
+			
+				if (that.data.likeFlag == 0) {
+					addDislike({
+						userId: that.user.id || null,
+						openId: that.user.openId || '',
+						paperId: parseInt(that.data.id),
+					}).then(response => {
+						that.data.likeFlag = 1;
+						that.$modal.msg('点踩成功');
+					})
+				} else if (that.data.likeFlag == 2) {
+					updateLike({
+						userId: that.user.id || null,
+						openId: that.user.openId || '',
+						paperId: parseInt(that.data.id),
+						like: false
+					}).then(response => {
+						that.data.likeFlag = 1;
+						that.$modal.msg('点踩成功');
+					})
+				} else {
+					cancelLike({
+						userId: that.user.id || null,
+						openId: that.user.openId || '',
+						paperId: parseInt(that.data.id),
+					}).then(response => {
+						that.data.likeFlag = 0;
+						that.$modal.msg('取消点踩成功');
+					})
+				}
+			
 			},
 			doFavorite(id) {
 				var that = this;
@@ -743,7 +804,8 @@
 		justify-content: space-between;
 		align-items: center;
 		align-content: center;
-
+		padding-bottom: 30rpx;
+		
 		.right {
 			display: flex;
 			flex-direction: row;
@@ -757,11 +819,10 @@
 			flex-direction: row;
 			align-items: center;
 			align-content: center;
-			margin-right: 10rpx;
-
-			text {
-				margin-right: 5rpx;
-			}
+			margin-right: 40rpx;
+			// text {
+			// 	margin-right: 5rpx;
+			// }
 		}
 	}
 

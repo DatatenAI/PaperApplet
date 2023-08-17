@@ -24,10 +24,10 @@
 				<view class="item" v-for="(item,index) in tbrList">
 					<view class="content" @click="navTo(`/pages/applications/conference/detail?id=${item.id}&year=${item.year}`)">
 						<view class="title" v-if="item.id">
-							{{ item.id }}总结
+							{{ item.id }}合集
 						</view>
 						<view class="bottom" v-if="item.id">
-							{{ item.full_name }} - {{ item.year }}
+							{{ item.full_name }}
 						</view>
 					</view>
 					<view class="thumb" @click="navTo(`/pages/applications/conference/detail?id=${item.id}&year=${item.year}`)" v-if="item.id">
@@ -140,9 +140,8 @@
 				
 				id: '',
 				tbrList: [
-					{id: "ICML", year: 2022, full_name:"International Conference on Machine Learning"},
-					{id: "ICML", year: 2023, full_name:"International Conference on Machine Learning"},
-					{id: "CVPR", year: 2022, full_name:"Computer Vision and Pattern Recognition"},
+					{id: "ICML", full_name:"International Conference on Machine Learning"},
+					{id: "CVPR", full_name:"Computer Vision and Pattern Recognition"},
 				]
 			}
 		},
