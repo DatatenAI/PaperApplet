@@ -142,6 +142,7 @@
 				tbrList: [
 					{id: "ICML", full_name:"International Conference on Machine Learning"},
 					{id: "CVPR", full_name:"Computer Vision and Pattern Recognition"},
+					{id: "ICLR", full_name:"International Conference on Learning Representations"},
 				]
 			}
 		},

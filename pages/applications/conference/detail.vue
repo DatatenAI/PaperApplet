@@ -106,10 +106,12 @@
 					pageSize: 10
 				},
 				activeIndex: 0,
-				conference_years: [{
-					id: 0,
-					keywordShort: 2021,
-				},{
+				conference_years: [
+				// {
+				// 	id: 0,
+				// 	keywordShort: 2021,
+				// },
+				{
 					id: 1,
 					keywordShort: 2022,
 				},{

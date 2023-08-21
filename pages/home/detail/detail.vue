@@ -45,8 +45,8 @@
 				</view>
 				<view class="contentbox">
 					<!-- <u-parse :content="data.summary[0].content" :tag-style="style"></u-parse> -->
-					<MDParserHighlight :resource="data.summary[0].basicInfo"></MDParserHighlight>
-					<MDParserHighlight :resource="data.summary[0].briefIntroduction"></MDParserHighlight>
+					<!-- <MDParserHighlight :resource="data.summary[0].basicInfo"></MDParserHighlight>
+					<MDParserHighlight :resource="data.summary[0].briefIntroduction"></MDParserHighlight> -->
 					<MDParserHighlight :resource="data.summary[0].content"></MDParserHighlight>
 				</view>
 				<!-- <view class="pdf-icon"
