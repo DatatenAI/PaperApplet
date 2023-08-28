@@ -23,6 +23,9 @@
 				<uni-icons type="plusempty" size="18" color="#0f80ff" class="more"
 					@click="navTo(`/pages/home/subscribe/index`)"></uni-icons>
 			</view>
+			<view class="list_empty_tab" v-if="tabIndex == 1 && !tabIndexStatus">
+				登录后查看更多板块
+			</view>
 		</view>
 		<uni-transition ref="ani" :mode-class="animationSetting[1].modeClass" :show="animationSetting[1].show">
 			<view class="list" v-if="tabIndex == 1">
@@ -72,12 +75,17 @@
 							<!-- <text>{{ item.paperInfo.authors || ''}}</text> -->
 						</view>
 					</view>
-					<view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
+					<!-- <view class="thumb" @click="navTo(`/pages/home/detail/detail?id=${item.paperInfo.id}`)" v-if="item.paperInfo.imgUrl">
 						<image
 							:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
 							mode="widthFix"></image>
-					</view>
+					</view> -->
 					<view class="bottom">
+						<!-- <view class="source_box" v-if="item.paperInfo.imgUrl">
+								<image
+									:src="config.staticUrl + item.paperInfo.pdfHash + '/' + item.paperInfo.imgUrl.split(',')[0]"
+									mode="widthFix"></image>
+						</view> -->
 						<view class="btn_box">
 							<view class="btn" v-if="!(tbrCancelList[index])" @click="undoRead(index, item.paperId, true)">取消待阅</view>
 							<view class="join-btn" v-else @click="undoRead(index, item.paperId, false)">已取消</view>
@@ -660,6 +668,10 @@
 		.tab_box {
 			width: calc(100% - 60rpx) !important;
 		}
+		
+		.item {
+			text-align: center;
+		}
 
 		.more {
 			// width:60rpx ;
@@ -668,6 +680,27 @@
 			// right: 0;
 			// z-index: 77;
 		}
+	}
+	
+	.list_empty_tab {
+		// width: calc(100% - 40rpx);
+		// position: absolute;
+		// top: 84rpx ;
+		background-color: #f5f8fa;
+		// z-index: 66;
+		width: 100%;
+		height: auto;
+		position: fixed;
+		// padding-top: 92rpx;
+		padding-bottom: 15rpx;
+		// display: flex;
+		// flex-direction: row;
+		// justify-content: space-between;
+		// align-items: center;
+		// align-content: center;
+		box-sizing: border-box;
+		text-align: center;
+		
 	}
 
 	.list {
@@ -778,10 +811,11 @@
 			padding: 20rpx 15rpx;
 
 			.content {
-				width: calc(100% - 220rpx);
+				width: calc(100% - 180rpx);
 				display: flex;
 				flex-direction: column;
 				justify-content: space-between;
+				background-color: #fff;
 
 				.title {
 					height: 120rpx;
@@ -815,15 +849,18 @@
 				}
 			}
 			.bottom {
-				padding: 10rpx 15rpx;
+				margin-top: 0;
+				padding: 15rpx 15rpx;
 				display: flex;
-				flex-direction: row;
+				flex-direction: column;
 				justify-content: space-between;
 				align-items: center;
 				align-content: center;
 			
 				.source_box {
-					width: calc(100% - 130rpx);
+					width: 200rpx;
+					height: 176rpx;
+					margin-bottom: 30rpx;
 					display: flex;
 					flex-direction: row;
 					align-items: center;
@@ -834,18 +871,6 @@
 					display: -webkit-box;
 					white-space: normal;
 					-webkit-box-orient: vertical;
-			
-					.avatar {
-						width: 40rpx;
-						height: 40rpx;
-						border-radius: 50%;
-					}
-			
-					text {
-						font-size: 24rpx;
-						color: #999;
-						margin-left: 10rpx;
-					}
 				}
 			
 				.btn_box {

@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="notice">
-			<view class="notice-item" v-for="item in announceList">
+			<view class="notice-item" v-if="announceList.length > 0" v-for="item in announceList">
 				<text class="time">{{item.createTime | formatDate}}</text>
 				<view class="content" @click="navTo(`/pages/common/notice/detail?id=${item.id}`)">
 					<text class="title">{{item.title}}</text>
@@ -12,7 +12,6 @@
 				</view>
 			</view>
 		</view>
-		
 		<view class="nodata" v-if="announceList.length == 0">
 			<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix"></image>
 		</view>
@@ -89,9 +88,9 @@
 			getNotice() {
 				var that = this;
 				searchInform({
-					// userId: that.user.id || null,
-					// openId: that.user.openId || '',
-					// keywords: that.query.keywords,
+					userId: that.user.id || null,
+					openId: that.user.openId || '',
+					keywords: that.query.keywords,
 					pageNum: that.query.pageNum,
 					pageSize: that.query.pageSize,
 				}).then(response => {

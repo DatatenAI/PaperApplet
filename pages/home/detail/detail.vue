@@ -87,7 +87,7 @@
 					<!-- <text>取消点赞</text> -->
 				</view>
 				
-				<view class="item" @click="doDislike()" v-if="data.likeFlag != 1">
+				<view class="item" @click="toggle_feedback('bottom')" v-if="data.likeFlag != 1">
 					<uni-icons type="hand-down" size="30" color="#333"></uni-icons>
 					<!-- <text>点踩</text> -->
 				</view>
@@ -114,6 +114,22 @@
 					<uni-list>
 						<uni-list-item :title="item.name" v-for="item in albumList" clickable showArrow
 							@click="doFavorite(item.id)" />
+					</uni-list>
+				</uni-section>
+			</view>
+		</uni-popup>
+		
+		<uni-popup ref="feedback" background-color="#fff" @change="change">
+			<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
+				<uni-section title="反馈" type="circle">
+					<uni-list>
+						<uni-list-item title="联系我们" note="或者勾选下方选项并提交反馈" @click="navTo(`/pages/public/about`)" clickable showArrow/>
+						<uni-list-item :title="comment" v-for="comment in feedbackChoice" clickable showSwitch
+							@click="toggleComment(comment)" />
+					</uni-list>
+					
+					<uni-list font>
+						<uni-list-item rightText="提交反馈" @click="doDislike()" clickable showArrow/>
 					</uni-list>
 				</uni-section>
 			</view>
@@ -256,6 +272,12 @@
 				// 	collectionStatus: '',
 				// },
 				albumList: [],
+				feedbackChoice: [
+					"文章总结有问题",
+					"文章板块分类不好",
+					"图片提取有问题"
+				],
+				dislikeComment: [],
 				data: {
 
 				},
@@ -422,6 +444,17 @@
 				// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
 				this.$refs.popup.open(type)
 			},
+			toggle_feedback(type) {
+				var that = this;
+				if (!that.user.id || !that.user.openId) {
+					that.$modal.msg('请登录');
+					return false;
+				}
+				// need comment
+				this.type = type
+				// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
+				this.$refs.feedback.open(type)
+			},
 			doLike() {
 				var that = this;
 				if (!that.user.id || !that.user.openId) {
@@ -460,31 +493,47 @@
 				}
 
 			},
+			
+			toggleComment(comment){
+				var that = this;
+				if (!that.dislikeComment.includes(comment)){
+					that.dislikeComment.push(comment);
+				} else {
+					that.dislikeComment.splice(
+						that.dislikeComment.indexOf(comment), 1
+					)
+				}
+			},
 			doDislike() {
 				var that = this;
 				if (!that.user.id || !that.user.openId) {
 					that.$modal.msg('请登录');
 					return false;
 				}
-			
+				
+				let comment = that.dislikeComment.join();
 				if (that.data.likeFlag == 0) {
 					addDislike({
 						userId: that.user.id || null,
 						openId: that.user.openId || '',
 						paperId: parseInt(that.data.id),
+						comment: comment
 					}).then(response => {
 						that.data.likeFlag = 1;
 						that.$modal.msg('点踩成功');
+						that.$refs.feedback.close();
 					})
 				} else if (that.data.likeFlag == 2) {
 					updateLike({
 						userId: that.user.id || null,
 						openId: that.user.openId || '',
 						paperId: parseInt(that.data.id),
-						like: false
+						like: false,
+						comment: comment
 					}).then(response => {
 						that.data.likeFlag = 1;
 						that.$modal.msg('点踩成功');
+						that.$refs.feedback.close();
 					})
 				} else {
 					cancelLike({
@@ -496,7 +545,6 @@
 						that.$modal.msg('取消点踩成功');
 					})
 				}
-			
 			},
 			doFavorite(id) {
 				var that = this;
