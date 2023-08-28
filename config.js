@@ -4,8 +4,9 @@ module.exports = {
 	// baseUrl: 'https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run',
 	// TODO(yjb): checkout docs for HBuilder of switching configs between dev and prod.
 	// baseUrl: 'http://dev.dataten.top:3000',//192.168.88.121
-	baseUrl: 'http://localhost:3000',//192.168.88.121
+	// baseUrl: 'http://localhost:3000',//192.168.88.121
 	// baseUrl: 'https://website-chatpaper-fsiijzmehw.cn-hongkong.fcapp.run',
+	baseUrl: 'https://website-chatpaper-yvimfzmzjx.cn-hongkong.fcapp.run',
 	// baseUrl: 'https://chatPaper.carmela.tech',
 	
 	webViewUrl:'https://html2image.dataten.top', // 阿里云 OSS 域名

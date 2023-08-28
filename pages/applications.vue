@@ -19,12 +19,11 @@
 			
 			
 			<view class="item">
-				<view>
-					<!-- <image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_noready.png" style="width: 80rpx;" mode="widthFix"></image> -->
+				<view @click="navTo(`/pages/public/about`)">
 					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_noready.png" style="width: 120rpx;" mode="widthFix"></image>
 				</view>
-				<view class="title bolder">
-					Coming soon ...
+				<view class="title bolder" @click="navTo(`/pages/public/about`)">
+					提点意见?
 				</view>
 			</view>
 			
