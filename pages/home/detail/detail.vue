@@ -123,7 +123,7 @@
 			<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
 				<uni-section title="反馈" type="circle">
 					<uni-list>
-						<uni-list-item title="联系我们" note="或者勾选下方选项并提交反馈" @click="navTo(`/pages/public/about`)" clickable showArrow/>
+						<uni-list-item title="联系我们" note="或者勾选下方选项并提交反馈" @click="navTo(`/pages/public/join`)" clickable showArrow/>
 						<uni-list-item :title="comment" v-for="comment in feedbackChoice" clickable showSwitch
 							@click="toggleComment(comment)" />
 					</uni-list>

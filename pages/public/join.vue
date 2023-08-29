@@ -1,18 +1,33 @@
 <template>
 	<view class="page">
-		<view class="item" v-for="item in list">
+		<view class="item">
 			<view class="uni-icon">
-				<image :src="item.imgUrl" mode="widthFix">
+				<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/wechat.png" mode="widthFix">
 			</view>
-			<view class="content">
-				<view class="name">{{item.title || ''}}</view>
-				<view class="remark">{{item.remark || ''}}</view>
+			<view class="content" @click="toggle('center', 'wechat-popup')">
+				<view class="name">微信群</view>
+				<view class="remark">点击显示二维码</view>
 			</view>
 		</view>
-		
-		<view class="nodata" v-if="list.length == 0">
-			<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/nodata.svg" mode="widthFix"></image>
+		<view class="item">
+			<view class="uni-icon">
+				<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/QQ.png" mode="widthFix">
+			</view>
+			<view class="content" @click="toggle('center', 'qq-popup')">
+				<view class="name">QQ群</view>
+				<view class="remark">点击显示二维码</view>
+			</view>
 		</view>
+		<uni-popup ref="wechat-popup" background-color="#fff">
+			<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
+				<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/wechat.png" mode="widthFix">
+			</view>
+		</uni-popup>
+		<uni-popup ref="qq-popup" background-color="#fff">
+			<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
+				<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/QQ.png" mode="widthFix">
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -36,7 +51,16 @@
 					pageNum: 1,
 					pageSize: 10
 				},
-				list: [],
+				list: [
+					{imgUrl: "",
+					 title: "微信群",
+					 remark: "+++++++"
+					}, 
+					{imgUrl: "",
+					 title: "QQ群",
+					 remark: "+++++++"
+					}
+				],
 			}
 		},
 		filters: {
@@ -96,6 +120,26 @@
 
 		},
 		methods: {
+			toggle(type, popup_ref) {
+				var that = this;
+				this.type = type
+				// open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
+				this.$refs[popup_ref].open(type)
+			},
+			copyURL(mytext) {
+				var that = this;
+			    try {
+					uni.setClipboardData({
+						data: mytext,
+						success: () => {
+							that.$modal.msg('已复制');
+						}
+					})
+			    } catch($e) {
+					that.$modal.msg('复制失败');
+					console.log($e);
+			    }
+			  },
 			getJoinList() {
 				var that = this;
 				searchCommunication({

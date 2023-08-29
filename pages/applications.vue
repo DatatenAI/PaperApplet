@@ -19,10 +19,10 @@
 			
 			
 			<view class="item">
-				<view @click="navTo(`/pages/public/about`)">
+				<view @click="navTo(`/pages/public/join`)">
 					<image src="https://miniprogram-public-hk.oss-cn-hongkong.aliyuncs.com/images/app_noready.png" style="width: 120rpx;" mode="widthFix"></image>
 				</view>
-				<view class="title bolder" @click="navTo(`/pages/public/about`)">
+				<view class="title bolder" @click="navTo(`/pages/public/join`)">
 					提点意见?
 				</view>
 			</view>
